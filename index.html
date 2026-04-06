@@ -1,150 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Voice to Text App</title>
+<meta charset="UTF-8">
+<title>Voice to Text Pro</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      text-align: center;
-      padding: 40px;
-    }
+<style>
+body {
+  font-family: Arial;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  text-align: center;
+  padding: 40px;
+}
 
-    .container {
-      background: rgba(0,0,0,0.3);
-      padding: 30px;
-      border-radius: 15px;
-      max-width: 600px;
-      margin: auto;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
+.container {
+  background: rgba(0,0,0,0.3);
+  padding: 30px;
+  border-radius: 15px;
+  max-width: 600px;
+  margin: auto;
+}
 
-    button {
-      padding: 12px 20px;
-      margin: 10px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-    }
+button {
+  padding: 10px 18px;
+  margin: 8px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-    .start { background: #00c853; color: white; }
-    .stop { background: #d50000; color: white; }
-    .clear { background: #ffab00; color: black; }
-    .copy { background: #2962ff; color: white; }
+.start { background: green; color: white; }
+.stop { background: red; color: white; }
+.clear { background: orange; }
+.copy { background: blue; color: white; }
+.delete { background: black; color: white; }
 
-    select {
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      margin-bottom: 15px;
-    }
+#output {
+  background: white;
+  color: black;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 15px;
+  min-height: 80px;
+}
 
-    #output {
-      background: white;
-      color: black;
-      padding: 15px;
-      border-radius: 10px;
-      min-height: 80px;
-      margin-top: 15px;
-    }
-
-    #history {
-      text-align: left;
-      margin-top: 20px;
-      max-height: 150px;
-      overflow-y: auto;
-      background: rgba(255,255,255,0.2);
-      padding: 10px;
-      border-radius: 10px;
-    }
-  </style>
+#history {
+  margin-top: 20px;
+  background: rgba(255,255,255,0.2);
+  padding: 10px;
+  border-radius: 10px;
+  max-height: 150px;
+  overflow-y: auto;
+  text-align: left;
+}
+</style>
 </head>
 
 <body>
 
 <div class="container">
-  <h2>🎤 Voice to Text App</h2>
+<h2>🎤 Voice to Text Pro</h2>
 
-  <select id="language">
-    <option value="en-US">English</option>
-    <option value="bn-BD">Bangla</option>
-    <option value="hi-IN">Hindi</option>
-  </select>
+<select id="language">
+  <option value="en-US">English</option>
+  <option value="bn-BD">Bangla</option>
+</select>
 
-  <br>
+<br>
 
-  <button class="start" onclick="startListening()">Start</button>
-  <button class="stop" onclick="stopListening()">Stop</button>
-  <button class="clear" onclick="clearText()">Clear</button>
-  <button class="copy" onclick="copyText()">Copy</button>
+<button class="start" onclick="startListening()">Start</button>
+<button class="stop" onclick="stopListening()">Stop</button>
+<button class="clear" onclick="clearText()">Clear</button>
+<button class="copy" onclick="copyText()">Copy</button>
+<button class="delete" onclick="deleteHistory()">Delete History</button>
 
-  <div id="output">Your speech will appear here...</div>
+<div id="output">Start speaking...</div>
 
-  <h3>📝 History</h3>
-  <div id="history"></div>
+<h3>📝 History</h3>
+<div id="history"></div>
+
 </div>
 
 <script>
-  let recognition;
-  let isListening = false;
+let recognition;
+let isListening = false;
 
-  function startListening() {
-    if (isListening) return;
+function startListening() {
+  if (isListening) return;
 
-    recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    const lang = document.getElementById("language").value;
+  recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 
-    recognition.lang = lang;
-    recognition.continuous = true;
+  recognition.lang = document.getElementById("language").value;
+  recognition.continuous = true;
+  recognition.interimResults = true;
 
-    recognition.start();
-    isListening = true;
+  recognition.start();
+  isListening = true;
 
-    recognition.onresult = function(event) {
-      let text = "";
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        text += event.results[i][0].transcript;
-      }
-
-      document.getElementById("output").innerText = text;
-    };
-
-    recognition.onend = function() {
-      isListening = false;
-    };
-  }
-
-  function stopListening() {
-    if (recognition) {
-      recognition.stop();
-      saveHistory();
+  recognition.onresult = function(event) {
+    let finalText = "";
+    for (let i = 0; i < event.results.length; i++) {
+      finalText += event.results[i][0].transcript + " ";
     }
-  }
+    document.getElementById("output").innerText = finalText;
+  };
 
-  function clearText() {
-    document.getElementById("output").innerText = "";
-  }
+  // 🔥 AUTO RESTART FIX
+  recognition.onend = function() {
+    if (isListening) {
+      recognition.start(); // auto restart
+    }
+  };
 
-  function copyText() {
-    const text = document.getElementById("output").innerText;
-    navigator.clipboard.writeText(text);
-    alert("Copied!");
-  }
+  recognition.onerror = function(event) {
+    console.log(event.error);
+  };
+}
 
-  function saveHistory() {
-    const text = document.getElementById("output").innerText;
-    if (text.trim() === "") return;
+function stopListening() {
+  isListening = false;
+  if (recognition) recognition.stop();
+  saveHistory();
+}
 
-    const historyDiv = document.getElementById("history");
-    const p = document.createElement("p");
-    p.innerText = "• " + text;
+function clearText() {
+  document.getElementById("output").innerText = "";
+}
 
-    historyDiv.prepend(p);
-  }
+function copyText() {
+  const text = document.getElementById("output").innerText;
+  navigator.clipboard.writeText(text);
+  alert("Copied!");
+}
+
+function saveHistory() {
+  const text = document.getElementById("output").innerText;
+  if (text.trim() === "") return;
+
+  const p = document.createElement("p");
+  p.innerText = "• " + text;
+
+  document.getElementById("history").prepend(p);
+}
+
+// 🔥 DELETE HISTORY
+function deleteHistory() {
+  document.getElementById("history").innerHTML = "";
+}
 </script>
 
 </body>
