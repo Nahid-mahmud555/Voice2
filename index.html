@@ -3,33 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strong AI Voice to Text</title>
+    <title>Ironclad Voice to Text</title>
     <style>
         :root { --bg: #030712; --card: #111827; --accent: #10b981; --text: #f3f4f6; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .container { background: var(--card); padding: 35px; border-radius: 25px; width: 90%; max-width: 550px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); text-align: center; border: 1px solid #1f2937; }
-        h2 { color: var(--accent); margin-bottom: 5px; letter-spacing: 1px; }
-        #status { font-size: 14px; color: #9ca3af; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
-        #display-area { background: #030712; border: 2px solid #374151; border-radius: 15px; padding: 25px; min-height: 180px; text-align: left; font-size: 1.25rem; line-height: 1.7; margin-bottom: 30px; color: #60a5fa; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); }
+        #status { font-size: 14px; color: #9ca3af; margin-bottom: 25px; font-weight: bold; }
+        #display-area { background: #030712; border: 2px solid #374151; border-radius: 15px; padding: 25px; min-height: 180px; text-align: left; font-size: 1.25rem; line-height: 1.7; margin-bottom: 30px; color: #60a5fa; white-space: pre-wrap; }
         .btn-group { display: flex; flex-direction: column; gap: 15px; }
         button { padding: 18px; border-radius: 12px; border: none; cursor: pointer; font-weight: bold; font-size: 17px; transition: 0.3s; width: 100%; }
-        #start-btn { background: var(--accent); color: white; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
-        #stop-btn { background: #ef4444; color: white; display: none; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); }
+        #start-btn { background: var(--accent); color: white; }
+        #stop-btn { background: #ef4444; color: white; display: none; }
         #clear-btn { background: #374151; color: #d1d5db; }
-        button:hover { transform: translateY(-3px); brightness: 1.1; }
-        .recording-mode { border: 2px solid #ef4444 !important; }
+        .recording-border { border: 2px solid #ef4444 !important; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>VOICE ENGINE PRO</h2>
-    <div id="status">Ready to Record</div>
-    <div id="display-area">আপনার কথা এখানে জমা হবে...</div>
+    <h2 style="color: var(--accent);">VOICE ENGINE ULTRA</h2>
+    <div id="status">READY</div>
+    <div id="display-area">আপনার কথাগুলো এখানে জমা হবে...</div>
     
     <div class="btn-group">
         <button id="start-btn">রেকর্ডিং শুরু করুন</button>
-        <button id="stop-btn">রেকর্ডিং থামান ও লেখা দেখুন</button>
+        <button id="stop-btn">রেকর্ডিং থামান ও সব লেখা দেখুন</button>
         <button id="clear-btn">মুছে ফেলুন</button>
     </div>
 </div>
@@ -45,87 +43,93 @@
 
     if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
-        
         recognition.continuous = true; 
-        recognition.interimResults = false; 
+        recognition.interimResults = true; // লাইভ রেজাল্ট অন রাখলাম যাতে ডেটা মিস না হয়
         recognition.lang = 'bn-BD';
 
-        let finalDatabase = []; // সব কথা এখানে জমা থাকবে
-        let manualStop = false;
+        let fullSpeech = ""; // সব কথা এখানে জমা হবে
+        let isRecording = false;
 
         recognition.onstart = () => {
+            isRecording = true;
             statusText.innerText = "🔴 ইঞ্জিন সচল: আমি শুনছি...";
             statusText.style.color = "#ef4444";
-            displayArea.classList.add('recording-mode');
-            displayArea.innerText = "আপনি কথা বলতে থাকুন, আমি সব জমা করছি...";
+            displayArea.classList.add('recording-border');
+            displayArea.innerText = "আপনি কথা বলুন, আমি রেকর্ড করছি...";
         };
 
         recognition.onresult = (event) => {
-            // নতুন কোনো কথা আসলেই সেটা ডাটাবেজে পুশ হবে
+            let interimSpeech = "";
+            let currentFinal = "";
+
             for (let i = event.resultIndex; i < event.results.length; ++i) {
+                const transcript = event.results[i][0].transcript;
                 if (event.results[i].isFinal) {
-                    let text = event.results[i][0].transcript.trim();
-                    if(text) finalDatabase.push(text);
-                    console.log("Captured:", text); // ডিবাগিং এর জন্য
+                    currentFinal += transcript + " ";
+                } else {
+                    interimSpeech = transcript; 
                 }
             }
+            
+            // কথা বলার সাথে সাথে আমরা মেইন ভেরিয়েবলে ডাটা সেভ করে রাখছি
+            if(currentFinal !== "") {
+                fullSpeech += currentFinal;
+            }
+            
+            // স্ক্রিনে হালকা করে দেখাচ্ছি যে আমি শুনছি (কিন্তু ডাবল হবে না)
+            console.log("Listening chunk: ", interimSpeech); 
         };
 
         recognition.onerror = (event) => {
-            console.error("Recognition Error:", event.error);
-            if(event.error === 'network') {
-                alert("ইন্টারনেট কানেকশন চেক করো মামা!");
+            console.log("Error type: " + event.error);
+            // যদি চুপ থাকার কারণে বন্ধ হয়, আমরা ম্যানুয়ালি অফ না করলে আবার চালু হবে
+            if (event.error === 'no-speech' && isRecording) {
+                try { recognition.start(); } catch(e) {}
             }
         };
 
         recognition.onend = () => {
-            // আসল ম্যাজিক: ব্রাউজার অফ করে দিলেও যদি আমরা ম্যানুয়ালি স্টপ না করি, তবে আবার স্টার্ট হবে
-            if (!manualStop) {
-                console.log("Auto-Restarting Engine...");
+            // যদি ইউজার নিজে অফ না করে, তবে ইঞ্জিন অটো রিস্টার্ট হবেই!
+            if (isRecording) {
                 recognition.start();
             }
         };
 
         startBtn.addEventListener('click', () => {
-            manualStop = false;
-            finalDatabase = []; 
+            fullSpeech = ""; 
+            isRecording = true;
             recognition.start();
             startBtn.style.display = "none";
             stopBtn.style.display = "block";
         });
 
         stopBtn.addEventListener('click', () => {
-            manualStop = true;
+            isRecording = false;
             recognition.stop();
             
             startBtn.style.display = "block";
             stopBtn.style.display = "none";
             statusText.innerText = "প্রসেসিং সম্পন্ন";
             statusText.style.color = "#10b981";
-            displayArea.classList.remove('recording-mode');
+            displayArea.classList.remove('recording-border');
 
-            // সব জমানো কথা একসাথে জোড়া লাগানো
-            if(finalDatabase.length > 0) {
-                displayArea.innerText = finalDatabase.join(". ") + "।";
-            } else {
-                displayArea.innerText = "আপনি বোধহয় কিছু বলেননি মামা!";
-            }
+            // ফাইনাল চেক: যদি ডাটা থাকে তবে দেখাবে
+            displayArea.innerText = fullSpeech.trim() !== "" ? fullSpeech : "আপনি বোধহয় কিছু বলেননি মামা!";
         });
 
         clearBtn.addEventListener('click', () => {
-            manualStop = true;
+            isRecording = false;
             recognition.stop();
-            finalDatabase = [];
-            displayArea.innerText = "আপনার কথা এখানে জমা হবে...";
-            statusText.innerText = "Ready to Record";
+            fullSpeech = "";
+            displayArea.innerText = "আপনার কথাগুলো এখানে জমা হবে...";
+            statusText.innerText = "READY";
             statusText.style.color = "#9ca3af";
             startBtn.style.display = "block";
             stopBtn.style.display = "none";
-            displayArea.classList.remove('recording-mode');
         });
 
     } else {
-        alert("মামা, আধুনিক ব্রাউজার (Chrome/Edge) ব্যবহার করো!");
+        alert("Chrome/Edge ব্রাউজার ব্যবহার করো মামা!");
     }
 </script>
 
