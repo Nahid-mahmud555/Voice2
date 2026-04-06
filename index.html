@@ -3,110 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Voice to Text - Smart Pro</title>
+    <title>AI Voice to Text - Fixed</title>
     <style>
-        :root {
-            --bg-color: #0f172a;
-            --container-bg: #1e293b;
-            --text-main: #f8fafc;
-            --accent-color: #38bdf8;
-            --stop-color: #ef4444;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-
-        .container {
-            background: var(--container-bg);
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            width: 90%;
-            max-width: 700px;
-            text-align: center;
-        }
-
-        h2 { margin-top: 0; color: var(--accent-color); }
-
-        #display-area {
-            background: #00000033;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 20px;
-            min-height: 250px;
-            max-height: 400px;
-            overflow-y: auto;
-            text-align: left;
-            font-size: 1.1rem;
-            line-height: 1.7;
-            margin-bottom: 20px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        .interim {
-            color: #94a3b8;
-            font-style: italic;
-        }
-
-        .status-dot {
-            height: 10px;
-            width: 10px;
-            background-color: #bbb;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 5px;
-        }
-
-        .listening .status-dot {
-            background-color: var(--stop-color);
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-
-        .btn-group { display: flex; gap: 15px; justify-content: center; }
-
-        button {
-            padding: 12px 30px;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        #start-btn { background: var(--accent-color); color: #0f172a; }
-        #stop-btn { background: var(--stop-color); color: white; display: none; }
-        #clear-btn { background: #475569; color: white; }
-
-        button:hover { transform: translateY(-2px); opacity: 0.9; }
-        button:active { transform: translateY(0); }
+        :root { --bg: #111827; --card: #1f2937; --accent: #10b981; --text: #f3f4f6; }
+        body { font-family: 'SolaimanLipi', Arial, sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: var(--card); padding: 25px; border-radius: 15px; width: 90%; max-width: 600px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
+        h2 { color: var(--accent); margin-bottom: 20px; }
+        #display-area { background: #111827; border: 1px solid #374151; border-radius: 10px; padding: 15px; min-height: 200px; max-height: 350px; overflow-y: auto; text-align: left; font-size: 1.2rem; line-height: 1.6; margin-bottom: 20px; }
+        .interim { color: #6b7280; font-style: italic; }
+        .btn-group { display: flex; gap: 10px; justify-content: center; }
+        button { padding: 12px 25px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.2s; }
+        #start-btn { background: var(--accent); color: white; }
+        #stop-btn { background: #ef4444; color: white; display: none; }
+        #clear-btn { background: #4b5563; color: white; }
+        button:hover { opacity: 0.8; }
+        #status { font-size: 14px; color: #9ca3af; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-<div class="container" id="main-container">
-    <h2>AI Voice to Text</h2>
-    <div id="status-container" style="margin-bottom: 10px; font-size: 14px; color: #94a3b8;">
-        <span class="status-dot"></span> <span id="status-text">সিস্টেম রেডি</span>
-    </div>
-
-    <div id="display-area" placeholder="এখানে আপনার কথাগুলো টেক্সট আকারে জমা হবে...">এখানে আপনার কথাগুলো টেক্সট আকারে জমা হবে...</div>
-
+<div class="container">
+    <h2>AI Voice to Text (Fixed)</h2>
+    <div id="status">সিস্টেম রেডি</div>
+    <div id="display-area">এখানে কথা বলা শুরু করলে লেখা আসবে...</div>
     <div class="btn-group">
         <button id="start-btn">শুরু করুন</button>
         <button id="stop-btn">থামুন</button>
@@ -119,69 +38,50 @@
     const stopBtn = document.getElementById('stop-btn');
     const clearBtn = document.getElementById('clear-btn');
     const displayArea = document.getElementById('display-area');
-    const statusText = document.getElementById('status-text');
-    const container = document.getElementById('main-container');
+    const statusText = document.getElementById('status');
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-    if (!SpeechRecognition) {
-        alert("দুঃখিত মামা, আপনার ব্রাউজারে এই প্রযুক্তি নেই। গুগল ক্রোম ব্যবহার করুন।");
-    } else {
+    if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
-        
-        recognition.continuous = true; 
-        recognition.interimResults = true; 
-        recognition.lang = 'bn-BD'; // ডিফল্ট বাংলা সেট করা
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'bn-BD';
 
-        let finalTranscript = '';
+        // আসল ট্রিক: আগের ভেরিয়েবল ছাড়াই ডিরেক্ট ইভেন্ট থেকে ডাটা নেওয়া
+        recognition.onresult = (event) => {
+            let finalOutput = '';
+            let interimOutput = '';
+
+            for (let i = 0; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    finalOutput += event.results[i][0].transcript;
+                } else {
+                    interimOutput += event.results[i][0].transcript;
+                }
+            }
+
+            // এখানে শুধু ফাইনাল আর ইন্টারিম যোগ করে দিলেই রিপিট হবে না
+            displayArea.innerHTML = `<span>${finalOutput}</span><span class="interim">${interimOutput}</span>`;
+            displayArea.scrollTop = displayArea.scrollHeight;
+        };
 
         recognition.onstart = () => {
-            container.classList.add('listening');
-            statusText.innerText = "আমি শুনছি... কথা বলুন";
+            statusText.innerText = "🔴 কথা বলুন, আমি শুনছি...";
             startBtn.style.display = "none";
             stopBtn.style.display = "inline-block";
         };
 
-        recognition.onresult = (event) => {
-            let interimTranscript = '';
-
-            // রেজাল্ট ইন্ডেক্স থেকে লুপ শুরু করা যাতে পুরোনো কথা ডাবল না হয়
-            for (let i = event.resultIndex; i < event.results.length; ++i) {
-                const transcript = event.results[i][0].transcript;
-                if (event.results[i].isFinal) {
-                    finalTranscript += transcript + ' ';
-                } else {
-                    interimTranscript = transcript;
-                }
-            }
-
-            // টেক্সট এরিয়া আপডেট
-            displayArea.innerHTML = `<span>${finalTranscript}</span><span class="interim">${interimTranscript}</span>`;
-            
-            // অটো স্ক্রল ডাউন
-            displayArea.scrollTop = displayArea.scrollHeight;
-        };
-
-        recognition.onerror = (event) => {
-            if (event.error === 'no-speech') return;
-            console.error("Error: ", event.error);
-            statusText.innerText = "ভুল হয়েছে: " + event.error;
-        };
-
         recognition.onend = () => {
-            // যদি ইউজার নিজে থেকে স্টপ না করে, তবে কানেকশন রিস্টার্ট হবে (বড় কথার জন্য)
             if (stopBtn.style.display === "inline-block") {
-                recognition.start();
+                recognition.start(); // অটো রিস্টার্ট লজিক
             } else {
-                container.classList.remove('listening');
                 statusText.innerText = "সিস্টেম রেডি";
             }
         };
 
         startBtn.addEventListener('click', () => {
-            if(displayArea.innerText === "এখানে আপনার কথাগুলো টেক্সট আকারে জমা হবে...") {
-                displayArea.innerText = "";
-            }
+            if(displayArea.innerText.includes("এখানে কথা বলা")) displayArea.innerText = "";
             recognition.start();
         });
 
@@ -192,9 +92,13 @@
         });
 
         clearBtn.addEventListener('click', () => {
-            finalTranscript = '';
-            displayArea.innerText = "এখানে আপনার কথাগুলো টেক্সট আকারে জমা হবে...";
+            displayArea.innerText = "";
+            // রিস্টার্ট করার সময় ডাটা ক্লিয়ার করার জন্য স্টপ করে স্টার্ট করা ভালো
+            recognition.stop();
         });
+
+    } else {
+        alert("Chrome ব্রাউজার ব্যবহার করুন মামা!");
     }
 </script>
 
