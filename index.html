@@ -3,39 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Voice to Text - Fixed</title>
+    <title>Voice to Text - Smart Process</title>
     <style>
-        :root { --bg: #111827; --card: #1f2937; --accent: #10b981; --text: #f3f4f6; }
-        body { font-family: 'SolaimanLipi', Arial, sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: var(--card); padding: 25px; border-radius: 15px; width: 90%; max-width: 600px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
-        h2 { color: var(--accent); margin-bottom: 20px; }
-        #display-area { background: #111827; border: 1px solid #374151; border-radius: 10px; padding: 15px; min-height: 200px; max-height: 350px; overflow-y: auto; text-align: left; font-size: 1.2rem; line-height: 1.6; margin-bottom: 20px; }
-        .interim { color: #6b7280; font-style: italic; }
-        .btn-group { display: flex; gap: 10px; justify-content: center; }
-        button { padding: 12px 25px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.2s; }
-        #start-btn { background: var(--accent); color: white; }
-        #stop-btn { background: #ef4444; color: white; display: none; }
-        #clear-btn { background: #4b5563; color: white; }
-        button:hover { opacity: 0.8; }
-        #status { font-size: 14px; color: #9ca3af; margin-bottom: 10px; }
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #10b981; --text: #f8fafc; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: var(--card); padding: 30px; border-radius: 20px; width: 90%; max-width: 550px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); text-align: center; }
+        h2 { color: var(--accent); margin-bottom: 10px; }
+        #status { font-size: 14px; color: #94a3b8; margin-bottom: 20px; font-weight: bold; }
+        #display-area { background: #0f172a; border: 2px solid #334155; border-radius: 15px; padding: 20px; min-height: 150px; text-align: left; font-size: 1.2rem; line-height: 1.6; margin-bottom: 25px; color: #38bdf8; }
+        .btn-group { display: flex; gap: 15px; justify-content: center; }
+        button { padding: 15px 30px; border-radius: 50px; border: none; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        #record-btn { background: var(--accent); color: white; width: 100%; max-width: 250px; }
+        #clear-btn { background: #475569; color: white; }
+        button:hover { transform: scale(1.05); opacity: 0.9; }
+        .recording { background: #ef4444 !important; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>AI Voice to Text (Fixed)</h2>
-    <div id="status">সিস্টেম রেডি</div>
-    <div id="display-area">এখানে কথা বলা শুরু করলে লেখা আসবে...</div>
+    <h2>AI Voice Converter</h2>
+    <div id="status">সিস্টেম প্রস্তুত</div>
+    <div id="display-area">আপনার টেক্সট এখানে আসবে...</div>
+    
     <div class="btn-group">
-        <button id="start-btn">শুরু করুন</button>
-        <button id="stop-btn">থামুন</button>
-        <button id="clear-btn">মুছে ফেলুন</button>
+        <button id="record-btn">কথা বলা শুরু করুন</button>
     </div>
+    <br>
+    <button id="clear-btn">মুছে ফেলুন</button>
 </div>
 
 <script>
-    const startBtn = document.getElementById('start-btn');
-    const stopBtn = document.getElementById('stop-btn');
+    const recordBtn = document.getElementById('record-btn');
     const clearBtn = document.getElementById('clear-btn');
     const displayArea = document.getElementById('display-area');
     const statusText = document.getElementById('status');
@@ -44,61 +44,61 @@
 
     if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = true;
+        
+        recognition.continuous = false; // একবারে একটা ইনপুট নিবে
+        recognition.interimResults = false; // লাইভ টেক্সট দেখাবে না
         recognition.lang = 'bn-BD';
 
-        // আসল ট্রিক: আগের ভেরিয়েবল ছাড়াই ডিরেক্ট ইভেন্ট থেকে ডাটা নেওয়া
-        recognition.onresult = (event) => {
-            let finalOutput = '';
-            let interimOutput = '';
-
-            for (let i = 0; i < event.results.length; ++i) {
-                if (event.results[i].isFinal) {
-                    finalOutput += event.results[i][0].transcript;
-                } else {
-                    interimOutput += event.results[i][0].transcript;
-                }
-            }
-
-            // এখানে শুধু ফাইনাল আর ইন্টারিম যোগ করে দিলেই রিপিট হবে না
-            displayArea.innerHTML = `<span>${finalOutput}</span><span class="interim">${interimOutput}</span>`;
-            displayArea.scrollTop = displayArea.scrollHeight;
-        };
+        let isRecording = false;
 
         recognition.onstart = () => {
-            statusText.innerText = "🔴 কথা বলুন, আমি শুনছি...";
-            startBtn.style.display = "none";
-            stopBtn.style.display = "inline-block";
+            isRecording = true;
+            statusText.innerText = "🔴 আমি শুনছি... কথা শেষ হলে বাটনে চাপ দিন";
+            recordBtn.innerText = "থামুন ও টেক্সট দেখুন";
+            recordBtn.classList.add('recording');
+        };
+
+        recognition.onresult = (event) => {
+            // কথা বলা শেষ হলে এখানে রেজাল্ট আসবে
+            const transcript = event.results[0][0].transcript;
+            displayArea.innerText = transcript;
+            statusText.innerText = "টেক্সট জেনারেট হয়েছে!";
+        };
+
+        recognition.onerror = (event) => {
+            statusText.innerText = "ভুল হয়েছে: " + event.error;
+            stopRecording();
         };
 
         recognition.onend = () => {
-            if (stopBtn.style.display === "inline-block") {
-                recognition.start(); // অটো রিস্টার্ট লজিক
-            } else {
-                statusText.innerText = "সিস্টেম রেডি";
-            }
+            stopRecording();
         };
 
-        startBtn.addEventListener('click', () => {
-            if(displayArea.innerText.includes("এখানে কথা বলা")) displayArea.innerText = "";
-            recognition.start();
-        });
+        function stopRecording() {
+            isRecording = false;
+            recordBtn.innerText = "কথা বলা শুরু করুন";
+            recordBtn.classList.remove('recording');
+            if(statusText.innerText.includes("শুনছি")) {
+                statusText.innerText = "প্রসেসিং শেষ";
+            }
+        }
 
-        stopBtn.addEventListener('click', () => {
-            stopBtn.style.display = "none";
-            startBtn.style.display = "inline-block";
-            recognition.stop();
+        recordBtn.addEventListener('click', () => {
+            if (!isRecording) {
+                displayArea.innerText = "শুনছি...";
+                recognition.start();
+            } else {
+                recognition.stop();
+            }
         });
 
         clearBtn.addEventListener('click', () => {
-            displayArea.innerText = "";
-            // রিস্টার্ট করার সময় ডাটা ক্লিয়ার করার জন্য স্টপ করে স্টার্ট করা ভালো
-            recognition.stop();
+            displayArea.innerText = "আপনার টেক্সট এখানে আসবে...";
+            statusText.innerText = "সিস্টেম প্রস্তুত";
         });
 
     } else {
-        alert("Chrome ব্রাউজার ব্যবহার করুন মামা!");
+        alert("মামা, Chrome ব্রাউজার ব্যবহার করো!");
     }
 </script>
 
