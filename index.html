@@ -1,121 +1,150 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Voice Engine - Final Fix</title>
-    <style>
-        :root { --bg: #050505; --card: #121212; --accent: #00ff88; --text: #e0e0e0; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: var(--card); padding: 30px; border-radius: 20px; width: 90%; max-width: 600px; box-shadow: 0 15px 40px rgba(0,255,136,0.1); text-align: center; border: 1px solid #222; }
-        #display-area { background: #000; border: 1px solid #333; border-radius: 12px; padding: 20px; min-height: 200px; text-align: left; font-size: 1.2rem; line-height: 1.6; margin-bottom: 25px; color: var(--accent); white-space: pre-wrap; word-wrap: break-word; }
-        .status { font-size: 14px; margin-bottom: 15px; letter-spacing: 1px; font-weight: bold; }
-        .btn-group { display: flex; flex-direction: column; gap: 12px; }
-        button { padding: 15px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
-        #start-btn { background: var(--accent); color: #000; }
-        #stop-btn { background: #ff4444; color: white; display: none; }
-        #clear-btn { background: #333; color: #aaa; }
-        button:hover { opacity: 0.8; transform: translateY(-2px); }
-    </style>
+  <meta charset="UTF-8">
+  <title>Voice to Text App</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .container {
+      background: rgba(0,0,0,0.3);
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    button {
+      padding: 12px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .start { background: #00c853; color: white; }
+    .stop { background: #d50000; color: white; }
+    .clear { background: #ffab00; color: black; }
+    .copy { background: #2962ff; color: white; }
+
+    select {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 15px;
+    }
+
+    #output {
+      background: white;
+      color: black;
+      padding: 15px;
+      border-radius: 10px;
+      min-height: 80px;
+      margin-top: 15px;
+    }
+
+    #history {
+      text-align: left;
+      margin-top: 20px;
+      max-height: 150px;
+      overflow-y: auto;
+      background: rgba(255,255,255,0.2);
+      padding: 10px;
+      border-radius: 10px;
+    }
+  </style>
 </head>
+
 <body>
 
 <div class="container">
-    <h2 style="color: var(--accent); margin-top: 0;">VOICE TO TEXT</h2>
-    <div id="status" class="status" style="color: #666;">সিস্টেম রেডি</div>
-    <div id="display-area">আপনার কথাগুলো এখানে জমা হবে...</div>
-    
-    <div class="btn-group">
-        <button id="start-btn">শুরু করুন</button>
-        <button id="stop-btn">থামুন ও লেখা দেখুন</button>
-        <button id="clear-btn">মুছে ফেলুন</button>
-    </div>
+  <h2>🎤 Voice to Text App</h2>
+
+  <select id="language">
+    <option value="en-US">English</option>
+    <option value="bn-BD">Bangla</option>
+    <option value="hi-IN">Hindi</option>
+  </select>
+
+  <br>
+
+  <button class="start" onclick="startListening()">Start</button>
+  <button class="stop" onclick="stopListening()">Stop</button>
+  <button class="clear" onclick="clearText()">Clear</button>
+  <button class="copy" onclick="copyText()">Copy</button>
+
+  <div id="output">Your speech will appear here...</div>
+
+  <h3>📝 History</h3>
+  <div id="history"></div>
 </div>
 
 <script>
-    const startBtn = document.getElementById('start-btn');
-    const stopBtn = document.getElementById('stop-btn');
-    const clearBtn = document.getElementById('clear-btn');
-    const displayArea = document.getElementById('display-area');
-    const statusText = document.getElementById('status');
+  let recognition;
+  let isListening = false;
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  function startListening() {
+    if (isListening) return;
 
-    if (SpeechRecognition) {
-        const recognition = new SpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = false; // লাইভ আপডেট অফ রাখলাম ডাবল সমস্যা এড়াতে
-        recognition.lang = 'bn-BD';
+    recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    const lang = document.getElementById("language").value;
 
-        let finalFullText = ""; 
-        let isActive = false;
+    recognition.lang = lang;
+    recognition.continuous = true;
 
-        recognition.onstart = () => {
-            isActive = true;
-            statusText.innerText = "🔴 রেকর্ডিং চলছে...";
-            statusText.style.color = "#ff4444";
-            displayArea.innerText = "আমি শুনছি, আপনি বলে যান...";
-        };
+    recognition.start();
+    isListening = true;
 
-        recognition.onresult = (event) => {
-            // আসল সমাধান: সব লুপ বাদ দিয়ে শুধু একদম শেষের ইভেন্টের ডাটা নিচ্ছি
-            let lastResultIndex = event.results.length - 1;
-            let currentText = event.results[lastResultIndex][0].transcript;
-            
-            // যদি ব্রাউজার নিশ্চিত হয় (isFinal), তবেই মেইন টেক্সটে যোগ হবে
-            if (event.results[lastResultIndex].isFinal) {
-                finalFullText += currentText + " ";
-                console.log("New part added: ", currentText);
-            }
-        };
+    recognition.onresult = function(event) {
+      let text = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        text += event.results[i][0].transcript;
+      }
 
-        recognition.onend = () => {
-            // যদি নিজে থেকে অফ না করি, অটো রি-স্টার্ট হবে
-            if (isActive) {
-                recognition.start();
-            }
-        };
+      document.getElementById("output").innerText = text;
+    };
 
-        recognition.onerror = (event) => {
-            if (event.error !== 'no-speech') {
-                console.error("Error: ", event.error);
-            }
-        };
+    recognition.onend = function() {
+      isListening = false;
+    };
+  }
 
-        startBtn.addEventListener('click', () => {
-            finalFullText = "";
-            isActive = true;
-            recognition.start();
-            startBtn.style.display = "none";
-            stopBtn.style.display = "block";
-        });
-
-        stopBtn.addEventListener('click', () => {
-            isActive = false;
-            recognition.stop();
-            startBtn.style.display = "block";
-            stopBtn.style.display = "none";
-            statusText.innerText = "প্রসেসিং সম্পন্ন";
-            statusText.style.color = "#00ff88";
-            
-            // সব শেষে একবারেই আউটপুট দেখাচ্ছে
-            displayArea.innerText = finalFullText.trim() !== "" ? finalFullText : "আপনি কিছু বলেননি!";
-        });
-
-        clearBtn.addEventListener('click', () => {
-            isActive = false;
-            recognition.stop();
-            finalFullText = "";
-            displayArea.innerText = "আপনার কথাগুলো এখানে জমা হবে...";
-            statusText.innerText = "সিস্টেম রেডি";
-            statusText.style.color = "#666";
-            startBtn.style.display = "block";
-            stopBtn.style.display = "none";
-        });
-
-    } else {
-        alert("মামা, Chrome ব্যবহার করো!");
+  function stopListening() {
+    if (recognition) {
+      recognition.stop();
+      saveHistory();
     }
+  }
+
+  function clearText() {
+    document.getElementById("output").innerText = "";
+  }
+
+  function copyText() {
+    const text = document.getElementById("output").innerText;
+    navigator.clipboard.writeText(text);
+    alert("Copied!");
+  }
+
+  function saveHistory() {
+    const text = document.getElementById("output").innerText;
+    if (text.trim() === "") return;
+
+    const historyDiv = document.getElementById("history");
+    const p = document.createElement("p");
+    p.innerText = "• " + text;
+
+    historyDiv.prepend(p);
+  }
 </script>
 
 </body>
