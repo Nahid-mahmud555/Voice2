@@ -2,69 +2,102 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <title>ভয়েস টু টেক্সট AI</title>
+    <title>নন-স্টপ ভয়েস টু টেক্সট</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #eef2f3; }
-        .box { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); text-align: center; width: 350px; }
-        #output { border: 2px dashed #bbb; padding: 15px; min-height: 80px; margin: 20px 0; border-radius: 10px; background: #fff; color: #333; }
-        button { background: #28a745; color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-size: 16px; transition: 0.3s; }
-        button:hover { background: #218838; }
-        .status { font-size: 14px; color: #666; }
+        body { font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #121212; color: white; margin: 0; }
+        .container { background: #1e1e1e; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 90%; max-width: 600px; text-align: center; }
+        #text-area { border: 1px solid #333; padding: 20px; min-height: 200px; max-height: 300px; overflow-y: auto; margin: 20px 0; border-radius: 12px; background: #252525; text-align: left; line-height: 1.6; font-size: 18px; color: #00ff88; }
+        .controls { display: flex; gap: 10px; justify-content: center; }
+        button { padding: 12px 25px; border-radius: 50px; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        #start-btn { background: #007bff; color: white; }
+        #stop-btn { background: #dc3545; color: white; display: none; }
+        button:hover { opacity: 0.8; transform: translateY(-2px); }
+        .status { color: #888; font-size: 14px; margin-bottom: 5px; }
     </style>
 </head>
 <body>
 
-<div class="box">
-    <h2>ভয়েস টাইপিং</h2>
-    <p class="status" id="status">নিচের বাটনে ক্লিক করে কথা বলুন...</p>
-    <div id="output">আপনার কথা এখানে দেখা যাবে...</div>
-    <button id="start-btn">কথা বলা শুরু করুন</button>
+<div class="container">
+    <h2>AI ভয়েস টাইপিং (Continuous)</h2>
+    <p class="status" id="status">নিচের বাটনে ক্লিক করে কথা বলা শুরু করুন</p>
+    <div id="text-area" placeholder="আপনার কথা এখানে দেখা যাবে...">এখানে লেখা উঠবে...</div>
+    
+    <div class="controls">
+        <button id="start-btn">শুরু করুন</button>
+        <button id="stop-btn">বন্ধ করুন</button>
+    </div>
 </div>
 
 <script>
     const startBtn = document.getElementById('start-btn');
-    const output = document.getElementById('output');
+    const stopBtn = document.getElementById('stop-btn');
+    const textArea = document.getElementById('text-area');
     const status = document.getElementById('status');
 
-    // ব্রাউজার সাপোর্ট চেক
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
         
-        // বাংলা ইনপুট নেওয়ার জন্য 'bn-BD' সেট করা হয়েছে
-        recognition.lang = 'bn-BD'; 
-        recognition.interimResults = false;
+        // প্রধান পরিবর্তনগুলো এখানে:
+        recognition.continuous = true; // যতক্ষণ তুমি না থামাবে ততক্ষণ চলতে থাকবে
+        recognition.interimResults = true; // কথা বলার সাথে সাথে স্ক্রিনে লেখা উঠবে
+        recognition.lang = 'bn-BD'; // বাংলার জন্য
+
+        let finalTranscript = '';
 
         recognition.onstart = () => {
-            status.innerText = "আমি শুনছি... কথা বলুন।";
-            startBtn.style.background = "#dc3545";
-            startBtn.innerText = "রেকর্ডিং হচ্ছে...";
-        };
-
-        recognition.onspeechend = () => {
-            recognition.stop();
-            status.innerText = "প্রসেসিং হচ্ছে...";
-            startBtn.style.background = "#28a745";
-            startBtn.innerText = "আবার শুরু করুন";
+            status.innerText = "🔴 আমি শুনছি... কথা বলুন।";
+            startBtn.style.display = "none";
+            stopBtn.style.display = "inline-block";
         };
 
         recognition.onresult = (event) => {
-            const resultText = event.results[0][0].transcript;
-            output.innerText = resultText;
-            status.innerText = "সফলভাবে লেখা হয়েছে!";
+            let interimTranscript = '';
+
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript + ' ';
+                } else {
+                    interimTranscript += event.results[i][0].transcript;
+                }
+            }
+            // ফাইনাল লেখা আর রানিং লেখা একসাথে দেখানো
+            textArea.innerHTML = `<span style="color: white;">${finalTranscript}</span><span style="color: #888;">${interimTranscript}</span>`;
+            
+            // অটো স্ক্রল নিচে রাখা
+            textArea.scrollTop = textArea.scrollHeight;
         };
 
         recognition.onerror = (event) => {
             status.innerText = "ভুল হয়েছে: " + event.error;
+            stopRecording();
         };
 
+        recognition.onend = () => {
+            if (status.innerText.includes("🔴")) {
+                recognition.start(); // যদি হঠাৎ বন্ধ হয়ে যায়, আবার অটো স্টার্ট হবে
+            }
+        };
+
+        function stopRecording() {
+            recognition.stop();
+            status.innerText = "থামানো হয়েছে।";
+            startBtn.style.display = "inline-block";
+            stopBtn.style.display = "none";
+        }
+
         startBtn.addEventListener('click', () => {
+            finalTranscript = ''; // নতুন করে শুরু করলে আগের লেখা মুছে যাবে (ইচ্ছা করলে রাখতে পারো)
             recognition.start();
         });
 
+        stopBtn.addEventListener('click', () => {
+            stopRecording();
+        });
+
     } else {
-        alert("দুঃখিত, আপনার ব্রাউজারে এই ফিচারটি সাপোর্ট করছে না। গুগল ক্রোম ব্যবহার করুন।");
+        alert("আপনার ব্রাউজারে এটি সাপোর্ট করছে না। Chrome ব্যবহার করুন।");
     }
 </script>
 
