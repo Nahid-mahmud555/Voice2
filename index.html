@@ -2,165 +2,648 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Voice to Text Pro</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>3D Voice AI Nexus | Modern Speech Studio</title>
+<!-- Google Fonts for modern typography -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+<!-- Font Awesome 6 (free icons) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
-body {
-  font-family: Arial;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  text-align: center;
-  padding: 40px;
-}
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-.container {
-  background: rgba(0,0,0,0.3);
-  padding: 30px;
-  border-radius: 15px;
-  max-width: 600px;
-  margin: auto;
-}
+  body {
+    min-height: 100vh;
+    background: radial-gradient(circle at 20% 30%, #0a0f1e, #03050b);
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    position: relative;
+    overflow-x: hidden;
+  }
 
-button {
-  padding: 10px 18px;
-  margin: 8px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
+  /* 3D Animated Background Canvas */
+  #bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.6;
+  }
 
-.start { background: green; color: white; }
-.stop { background: red; color: white; }
-.clear { background: orange; }
-.copy { background: blue; color: white; }
-.delete { background: black; color: white; }
+  /* Main Glassmorphic Card with 3D hover + float */
+  .glass-card {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 720px;
+    background: rgba(12, 20, 35, 0.55);
+    backdrop-filter: blur(14px);
+    border-radius: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 0 0.5px rgba(255, 255, 255, 0.1) inset;
+    transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), box-shadow 0.4s ease;
+    animation: float3D 6s infinite ease-in-out;
+    transform-style: preserve-3d;
+  }
 
-select {
-  padding: 8px;
-  border-radius: 6px;
-  margin-bottom: 10px;
-}
+  .glass-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 35px 55px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.25) inset;
+  }
 
-#output {
-  background: white;
-  color: black;
-  padding: 15px;
-  border-radius: 10px;
-  margin-top: 15px;
-  min-height: 80px;
-}
+  @keyframes float3D {
+    0% { transform: translateY(0px) rotateX(0deg); }
+    50% { transform: translateY(-8px) rotateX(1deg); }
+    100% { transform: translateY(0px) rotateX(0deg); }
+  }
 
-#history {
-  margin-top: 20px;
-  background: rgba(255,255,255,0.2);
-  padding: 10px;
-  border-radius: 10px;
-  max-height: 150px;
-  overflow-y: auto;
-  text-align: left;
-}
+  .content {
+    padding: 2rem 1.8rem 2.2rem;
+  }
+
+  /* header with 3d text glow */
+  .title-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 1.8rem;
+    gap: 12px;
+  }
+  h2 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #FFFFFF, #B9F3FF, #8A6CFF);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  h2 i {
+    background: none;
+    -webkit-background-clip: unset;
+    color: #a87eff;
+    text-shadow: 0 0 8px #a87eff;
+    font-size: 1.8rem;
+  }
+  .lang-pill {
+    background: rgba(10, 20, 40, 0.7);
+    backdrop-filter: blur(5px);
+    border-radius: 60px;
+    padding: 5px 15px;
+    border: 1px solid rgba(255,255,240,0.25);
+  }
+  select {
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border: 1px solid #5f7fbf;
+    border-radius: 2rem;
+    padding: 10px 20px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    outline: none;
+    transition: 0.2s;
+    font-family: 'Inter', monospace;
+  }
+  select:hover {
+    border-color: #bb9aff;
+    box-shadow: 0 0 12px rgba(155, 100, 255, 0.4);
+  }
+
+  /* 3D button grid */
+  .buttons-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 28px 0 20px;
+  }
+  .action-btn {
+    background: rgba(25, 35, 55, 0.7);
+    backdrop-filter: blur(8px);
+    border: none;
+    padding: 12px 22px;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    font-family: 'Inter', sans-serif;
+    color: #f0f3ff;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+    border: 0.5px solid rgba(255,255,210,0.2);
+  }
+  .action-btn i {
+    font-size: 1.1rem;
+  }
+  .action-btn:hover {
+    transform: translateY(-4px) scale(1.02);
+    background: rgba(55, 75, 110, 0.85);
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.4);
+    border-color: rgba(200, 180, 255, 0.6);
+  }
+  .start { background: linear-gradient(115deg, #1f6d49, #0e8f5e); box-shadow: 0 6px 14px #0e6b4450; }
+  .stop { background: linear-gradient(115deg, #ac3f3f, #c23b3b); }
+  .clear { background: linear-gradient(115deg, #7d6e3a, #b69b3f); }
+  .copy { background: linear-gradient(115deg, #1f5596, #2f6eb3); }
+  .delete { background: linear-gradient(115deg, #2a2a2a, #1a1a2e); }
+
+  /* Output panel with 3D depth */
+  .output-panel {
+    margin: 1.2rem 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(12px);
+    border-radius: 1.8rem;
+    padding: 1.3rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.2s;
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.5);
+  }
+  .output-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #c0d0ff;
+    margin-bottom: 12px;
+  }
+  #output {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: #f5f9ff;
+    font-weight: 500;
+    word-break: break-word;
+    min-height: 80px;
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 100%;
+    font-family: 'Inter', monospace;
+  }
+
+  /* history section 3D scroll */
+  .history-container {
+    margin-top: 1.4rem;
+  }
+  .history-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .history-header h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    background: linear-gradient(120deg, #e2e9ff, #b9cbff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    letter-spacing: -0.2px;
+  }
+  #history {
+    max-height: 150px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 1.3rem;
+    padding: 0.8rem 1rem;
+    backdrop-filter: blur(4px);
+    scrollbar-width: thin;
+    border: 0.5px solid rgba(255,255,200,0.15);
+  }
+  #history p {
+    background: rgba(255,255,255,0.08);
+    margin: 10px 0;
+    padding: 10px 14px;
+    border-radius: 28px;
+    font-size: 0.9rem;
+    color: #eef3ff;
+    border-left: 3px solid #8f6eff;
+    transition: 0.1s;
+    backdrop-filter: blur(4px);
+  }
+  #history p:hover {
+    transform: translateX(4px);
+    background: rgba(130, 110, 220, 0.25);
+    border-left-color: #ffc375;
+  }
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #1a1f2e;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #6f5ea2;
+    border-radius: 10px;
+  }
+
+  /* Live listening pulse effect */
+  .listening-pulse {
+    position: relative;
+  }
+  .pulse-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: #33ff99;
+    border-radius: 50%;
+    margin-left: 12px;
+    box-shadow: 0 0 8px #3eff9e;
+    animation: pulseRed 1.2s infinite;
+  }
+  @keyframes pulseRed {
+    0% { opacity: 0.4; transform: scale(0.8);}
+    100% { opacity: 1; transform: scale(1.3); background: #aaffdd;}
+  }
+
+  /* 3D mobile adjust */
+  @media (max-width: 550px) {
+    .content { padding: 1.5rem; }
+    .action-btn { padding: 9px 16px; font-size: 0.8rem; }
+    h2 { font-size: 1.5rem; }
+    #output { font-size: 1rem; }
+  }
+  footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.7rem;
+    opacity: 0.6;
+    color: #b9c6e6;
+  }
 </style>
 </head>
-
 <body>
 
-<div class="container">
-<h2>🎤 Voice to Text Pro</h2>
+<canvas id="bg-canvas"></canvas>
 
-<select id="language">
-  <option value="en-US">English</option>
-  <option value="bn-BD">Bangla</option>
-</select>
+<div class="glass-card">
+  <div class="content">
+    <div class="title-section">
+      <h2>
+        <i class="fas fa-microphone-alt"></i> 
+        Voice AI Nexus
+      </h2>
+      <div class="lang-pill">
+        <select id="language">
+          <option value="en-US">🌐 English (US)</option>
+          <option value="bn-BD">🇧🇩 বাংলা (Bangla)</option>
+          <option value="hi-IN">🇮🇳 हिंदी</option>
+          <option value="es-ES">🇪🇸 Español</option>
+        </select>
+      </div>
+    </div>
 
-<br>
+    <div class="buttons-grid">
+      <button class="action-btn start" id="startBtn"><i class="fas fa-play"></i> Start</button>
+      <button class="action-btn stop" id="stopBtn"><i class="fas fa-stop"></i> Stop</button>
+      <button class="action-btn clear" id="clearBtn"><i class="fas fa-eraser"></i> Clear</button>
+      <button class="action-btn copy" id="copyBtn"><i class="fas fa-copy"></i> Copy</button>
+      <button class="action-btn delete" id="deleteBtn"><i class="fas fa-trash-alt"></i> Delete History</button>
+    </div>
 
-<button class="start" onclick="startListening()">Start</button>
-<button class="stop" onclick="stopListening()">Stop</button>
-<button class="clear" onclick="clearText()">Clear</button>
-<button class="copy" onclick="copyText()">Copy</button>
-<button class="delete" onclick="deleteHistory()">Delete History</button>
+    <div class="output-panel">
+      <div class="output-label">
+        <i class="fas fa-waveform"></i> 
+        <span>LIVE TRANSCRIPT</span>
+        <span id="liveBadge"></span>
+      </div>
+      <div id="output" contenteditable="false">✨ Tap Start & speak...</div>
+    </div>
 
-<div id="output">Start speaking...</div>
-
-<h3>📝 History</h3>
-<div id="history"></div>
+    <div class="history-container">
+      <div class="history-header">
+        <h3><i class="fas fa-clock"></i> Voice History</h3>
+        <span style="font-size: 11px; color:#b8c7ff;"><i class="fas fa-database"></i> last spoken</span>
+      </div>
+      <div id="history"></div>
+    </div>
+    <footer>⚡ 3D immersive | Real‑time voice AI</footer>
+  </div>
 </div>
 
 <script>
-let recognition;
-let finalText = "";
-let lastText = "";
-let isListening = false;
+  // ---------- 3D ANIMATED BACKGROUND (canvas particles & wave) ----------
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  let particles = [];
+  let time = 0;
 
-function startListening() {
-  if (isListening) return;
+  function resizeCanvas() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
 
-  recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-
-  recognition.lang = document.getElementById("language").value;
-  recognition.continuous = true;
-  recognition.interimResults = true;
-
-  recognition.start();
-  isListening = true;
-
-  recognition.onresult = function(event) {
-    let currentText = "";
-
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      currentText += event.results[i][0].transcript;
+  class Particle3D {
+    constructor() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.z = Math.random() * 200; // depth
+      this.radius = 2 + Math.random() * 3;
+      this.speedX = (Math.random() - 0.5) * 0.4;
+      this.speedY = (Math.random() - 0.5) * 0.3;
+      this.color = `hsl(${200 + Math.random() * 80}, 70%, 65%)`;
     }
-
-    // 🔥 Duplicate remove logic
-    if (currentText !== lastText) {
-      let newPart = currentText.replace(lastText, "");
-      finalText += newPart + " ";
-      lastText = currentText;
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      // wrap around
+      if (this.x < -20) this.x = width + 20;
+      if (this.x > width + 20) this.x = -20;
+      if (this.y < -20) this.y = height + 20;
+      if (this.y > height + 20) this.y = -20;
+      // subtle z drift
+      this.z += 0.3;
+      if (this.z > 250) this.z = 10;
     }
+    draw() {
+      const perspective = 400 / (400 + this.z);
+      const x2 = (this.x - width/2) * perspective + width/2;
+      const y2 = (this.y - height/2) * perspective + height/2;
+      const radius2 = this.radius * perspective;
+      ctx.beginPath();
+      ctx.arc(x2, y2, radius2, 0, Math.PI*2);
+      ctx.fillStyle = this.color;
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = "rgba(150,100,255,0.8)";
+      ctx.fill();
+    }
+  }
 
-    document.getElementById("output").innerText = finalText;
+  function initParticles(count) {
+    particles = [];
+    for(let i=0; i<count; i++) particles.push(new Particle3D());
+  }
+
+  function draw3DBackground() {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, width, height);
+    // gradient radial aura
+    const grad = ctx.createRadialGradient(width/2, height/2, 50, width/2, height/2, width/1.5);
+    grad.addColorStop(0, '#050a1a');
+    grad.addColorStop(1, '#000000');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, width, height);
+    // draw glowing wave lines (3D effect)
+    ctx.save();
+    ctx.shadowBlur = 0;
+    for(let i=0; i<3; i++) {
+      ctx.beginPath();
+      const offset = time * 0.002 + i;
+      for(let x=0; x<width; x+=25) {
+        let y = height/2 + Math.sin(x * 0.008 + offset) * 45 + Math.cos(x * 0.015 + offset*1.3) * 20;
+        if(x===0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = `rgba(100, 150, 255, ${0.12 + i*0.05})`;
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+    }
+    ctx.restore();
+    // update & draw particles
+    for(let p of particles) {
+      p.update();
+      p.draw();
+    }
+    // floating orbs
+    for(let i=0; i<6; i++) {
+      ctx.beginPath();
+      const angle = time * 0.0015 + i;
+      const radX = width/2 + Math.sin(angle) * 110;
+      const radY = height/2 + Math.cos(angle*0.7) * 70;
+      const gradGlow = ctx.createRadialGradient(radX, radY, 2, radX, radY, 25);
+      gradGlow.addColorStop(0, 'rgba(120, 80, 255, 0.25)');
+      gradGlow.addColorStop(1, 'rgba(40, 20, 80, 0)');
+      ctx.fillStyle = gradGlow;
+      ctx.arc(radX, radY, 28, 0, Math.PI*2);
+      ctx.fill();
+    }
+    time++;
+    requestAnimationFrame(draw3DBackground);
+  }
+
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    initParticles(120);
+  });
+  resizeCanvas();
+  initParticles(130);
+  draw3DBackground();
+
+  // ---------- VOICE RECOGNITION LOGIC (preserved + enhanced UI feedback) ----------
+  let recognition;
+  let finalText = "";
+  let lastText = "";
+  let isListening = false;
+  let currentLang = "en-US";
+
+  const outputDiv = document.getElementById("output");
+  const languageSelect = document.getElementById("language");
+  const startBtn = document.getElementById("startBtn");
+  const stopBtn = document.getElementById("stopBtn");
+  const clearBtn = document.getElementById("clearBtn");
+  const copyBtn = document.getElementById("copyBtn");
+  const deleteBtn = document.getElementById("deleteBtn");
+  const historyDiv = document.getElementById("history");
+  const liveBadge = document.getElementById("liveBadge");
+
+  // Helper to update pulse & badge
+  function updateListeningUI(active) {
+    if(active) {
+      liveBadge.innerHTML = '<span class="pulse-dot"></span><span style="margin-left:6px;">Listening...</span>';
+    } else {
+      liveBadge.innerHTML = '';
+    }
+  }
+
+  // Save current text to history (preserving exact logic)
+  function saveHistory() {
+    const text = outputDiv.innerText.trim();
+    if (text === "") return;
+    const p = document.createElement("p");
+    p.innerText = "• " + text;
+    historyDiv.prepend(p);
+    // limit history items to 12 (avoid overflow, but not necessary)
+    while(historyDiv.children.length > 18) historyDiv.removeChild(historyDiv.lastChild);
+  }
+
+  function clearText() {
+    finalText = "";
+    lastText = "";
+    outputDiv.innerText = "";
+    // do not clear history with clear
+  }
+
+  function copyText() {
+    const text = outputDiv.innerText;
+    if (!text || text === "✨ Tap Start & speak...") {
+      // gentle alert with 3d feeling
+      const fakeAlert = document.createElement('div');
+      fakeAlert.innerText = "📋 Nothing to copy";
+      fakeAlert.style.position = 'fixed'; fakeAlert.style.bottom='20px'; fakeAlert.style.left='50%';
+      fakeAlert.style.transform='translateX(-50%)'; fakeAlert.style.background='#1e1f2c'; fakeAlert.style.padding='8px 18px';
+      fakeAlert.style.borderRadius='50px'; fakeAlert.style.color='white'; fakeAlert.style.zIndex='999'; fakeAlert.style.backdropFilter='blur(12px)';
+      document.body.appendChild(fakeAlert);
+      setTimeout(()=> fakeAlert.remove(), 1500);
+      return;
+    }
+    navigator.clipboard.writeText(text);
+    // custom notif
+    const notif = document.createElement('div');
+    notif.innerText = "✅ Copied to clipboard!";
+    notif.style.cssText = "position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#1f2b48; color:#ccddff; padding:10px 20px; border-radius:40px; backdrop-filter:blur(12px); z-index:999; font-weight:500;";
+    document.body.appendChild(notif);
+    setTimeout(()=> notif.remove(), 1500);
+  }
+
+  function deleteHistory() {
+    historyDiv.innerHTML = "";
+  }
+
+  // core start listening (identical logic, but with modern event hooks)
+  function startListening() {
+    if (isListening) {
+      // Already listening, ignore duplicate
+      return;
+    }
+    // get fresh lang
+    currentLang = languageSelect.value;
+    try {
+      recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = currentLang;
+      recognition.continuous = true;
+      recognition.interimResults = true;
+
+      recognition.onstart = function() {
+        isListening = true;
+        updateListeningUI(true);
+        // subtle UI glow
+        outputDiv.style.borderLeft = "3px solid #5effa3";
+      };
+
+      recognition.onresult = function(event) {
+        let currentInterim = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          currentInterim += event.results[i][0].transcript;
+        }
+        // Maintain final concatenation logic same as original
+        if (currentInterim !== lastText) {
+          let newPart = currentInterim.replace(lastText, "");
+          finalText += newPart + " ";
+          lastText = currentInterim;
+        }
+        outputDiv.innerText = finalText;
+        // auto-scroll output (soft)
+        outputDiv.scrollTop = outputDiv.scrollHeight;
+      };
+
+      recognition.onerror = function(e) {
+        console.warn("Speech error: ", e.error);
+        if (e.error === 'no-speech') {
+          // do nothing, keep alive
+        } else if (e.error === 'not-allowed') {
+          outputDiv.innerText = "🎤 Microphone access denied. Please allow permissions.";
+          stopListening();
+        }
+      };
+
+      recognition.onend = function() {
+        if (isListening) {
+          // restart to keep continuous listening (original behaviour)
+          try {
+            recognition.start();
+          } catch(e) { 
+            // if fails, set isListening false
+            isListening = false;
+            updateListeningUI(false);
+          }
+        } else {
+          updateListeningUI(false);
+          outputDiv.style.borderLeft = "";
+        }
+      };
+
+      recognition.start();
+    } catch(e) {
+      console.error(e);
+      outputDiv.innerText = "⚠️ Browser doesn't support Speech Recognition. Try Chrome/Edge.";
+    }
+  }
+
+  function stopListening() {
+    if (!isListening && recognition) {
+      // just in case double stop
+      if(recognition) try{recognition.stop();}catch(e){}
+      isListening = false;
+      updateListeningUI(false);
+      return;
+    }
+    isListening = false;
+    if (recognition) {
+      try { recognition.stop(); } catch(e) {}
+    }
+    // Save history as original logic when stop
+    saveHistory();
+    lastText = "";
+    updateListeningUI(false);
+    outputDiv.style.borderLeft = "";
+  }
+
+  // attach listeners to buttons (also preserving functions globally)
+  startBtn.onclick = () => startListening();
+  stopBtn.onclick = () => stopListening();
+  clearBtn.onclick = () => {
+    clearText();
+    // also clear final buffer but do NOT clear history per original spec
   };
+  copyBtn.onclick = () => copyText();
+  deleteBtn.onclick = () => deleteHistory();
 
-  // 🔥 Auto restart (pause holeo cholbe)
-  recognition.onend = function() {
-    if (isListening) recognition.start();
-  };
-}
+  // Language change while idle doesn't disturb current recognition, but if listening restart? better stop and start
+  languageSelect.addEventListener('change', () => {
+    if (isListening) {
+      // restart recognition with new language to reflect instantly (improved UX but preserve main behavior)
+      stopListening();
+      setTimeout(() => {
+        startListening();
+      }, 100);
+    }
+  });
 
-function stopListening() {
-  isListening = false;
-  if (recognition) recognition.stop();
-  saveHistory();
+  // On page unload, cleanup
+  window.addEventListener('beforeunload', () => {
+    if(recognition && isListening) {
+      try{ recognition.stop(); }catch(e){}
+    }
+  });
 
-  lastText = "";
-}
-
-function clearText() {
+  // Additional safety: initial output hint
+  outputDiv.innerText = "🎙️ Tap Start — voice to text";
   finalText = "";
   lastText = "";
-  document.getElementById("output").innerText = "";
-}
-
-function copyText() {
-  const text = document.getElementById("output").innerText;
-  navigator.clipboard.writeText(text);
-  alert("Copied!");
-}
-
-function saveHistory() {
-  const text = document.getElementById("output").innerText;
-  if (text.trim() === "") return;
-
-  const p = document.createElement("p");
-  p.innerText = "• " + text;
-
-  document.getElementById("history").prepend(p);
-}
-
-function deleteHistory() {
-  document.getElementById("history").innerHTML = "";
-}
 </script>
-
 </body>
 </html>
