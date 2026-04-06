@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>3D Insight Listener Pro | Gemini AI</title>
+<title>3D Insight Listener Pro | Gemini AI Working</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
@@ -258,8 +258,8 @@
     lastText = ""; updateListeningUI(false);
   }
 
-  // 🔥 Gemini API (CORS friendly, free)
-  const GEMINI_API_KEY = "AIzaSyDPbB8UDbn9bSTatAFIRUEwAiMQjiuqKUU";  // 👈 এখানে আপনার Gemini API key বসান
+  // 🔥 আপনার Gemini API key এখানে বসান (নতুন করে তৈরি করুন)
+  const GEMINI_API_KEY = "AIzaSyDti4v4nn-JwlXwMLlLurgC9LoeZw-Ut0g";  // 👈 এইটা রিপ্লেস করুন নতুন কী দিয়ে
   
   async function analyzeText() {
     const text = inputBox.value.trim();
@@ -275,18 +275,26 @@
         })
       });
       
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
+      console.log("API Response:", data);
+      
+      if (!response.ok) {
+        throw new Error(data.error?.message || `HTTP ${response.status}`);
+      }
+      
       const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No idea generated.";
       outputDiv.innerText = "💡 " + aiText;
     } catch(err) {
-      console.error(err);
-      outputDiv.innerText = "❌ Error: " + err.message + "। দয়া করে Gemini API key সেট করুন।";
+      console.error("Error:", err);
+      outputDiv.innerText = "❌ API Error: " + err.message + "। দয়া করে সঠিক Gemini API key দিন।";
     }
   }
 
   function clearText() { finalText = ""; lastText = ""; inputBox.value = ""; }
-  function copyText() { navigator.clipboard.writeText(inputBox.value); alert("Copied!"); }
+  function copyText() { 
+    navigator.clipboard.writeText(inputBox.value); 
+    const msg = document.createElement('div'); msg.innerText = "✅ Copied!"; msg.style.cssText = "position:fixed; bottom:20px; left:50%; background:#2c2f48; padding:8px 20px; border-radius:40px; color:white; z-index:999;"; document.body.appendChild(msg); setTimeout(() => msg.remove(), 1500);
+  }
   function deleteHistory() { historyDiv.innerHTML = ""; }
 
   languageSelect.addEventListener('change', () => { if (isListening) { stopListening(); setTimeout(startListening, 200); } });
