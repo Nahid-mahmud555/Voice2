@@ -528,11 +528,10 @@
     const p = document.createElement("p");
     p.innerText = "• " + text;
     historyDiv.prepend(p);
-    // limit history items to avoid overflow
     while (historyDiv.children.length > 15) historyDiv.removeChild(historyDiv.lastChild);
   }
 
-  // Start voice recognition (continuous, interim results, language support)
+  // Start voice recognition
   function startListening() {
     if (isListening) return;
     const lang = languageSelect.value;
@@ -557,17 +556,14 @@
           lastText = currentText;
         }
         inputBox.value = finalText;
-        // auto scroll effect
         inputBox.scrollTop = inputBox.scrollHeight;
       };
 
       recognition.onend = function() {
         if (isListening) {
-          // auto restart for continuous listening (like original voice assistant)
           try {
             recognition.start();
           } catch(e) {
-            console.log("restart error");
             isListening = false;
             updateListeningUI(false);
           }
@@ -581,8 +577,6 @@
         if (e.error === 'not-allowed') {
           inputBox.value = "🎤 Microphone access denied. Please allow permissions.";
           stopListening();
-        } else if (e.error === 'no-speech') {
-          // ignore, keep listening
         }
       };
     } catch(e) {
@@ -595,7 +589,6 @@
     if (recognition) {
       try { recognition.stop(); } catch(e) {}
     }
-    // Save current text to history when stopped
     if (inputBox.value.trim() !== "") {
       saveHistory();
     }
@@ -603,7 +596,7 @@
     updateListeningUI(false);
   }
 
-  // AI Analysis: HuggingFace (same endpoint)
+  // 🔥 এখানে API key সঠিক ফরম্যাটে দেওয়া হয়েছে (Bearer যোগ করে)
   async function analyzeText() {
     const text = inputBox.value.trim();
     if (!text) {
@@ -617,7 +610,7 @@
         {
           method: "POST",
           headers: {
-            "Authorization": "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",  // 👈 Replace with your HuggingFace API key
+            "Authorization": "Bearer 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",  // ✅ সঠিক ফরম্যাট
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
@@ -625,19 +618,24 @@
           })
         }
       );
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `HTTP ${response.status}`);
+      }
+      
       const data = await response.json();
       console.log("AI response:", data);
+      
       if (data.error) {
-        outputDiv.innerText = "❌ API Error: " + (data.error || "Invalid request");
-        if (data.error.includes("Authorization")) {
-          outputDiv.innerText = "🔑 API Key required. Please add HuggingFace token in code (Bearer YOUR_API_KEY_HERE)";
-        }
+        outputDiv.innerText = "❌ API Error: " + data.error;
       } else {
         const resultText = data[0]?.generated_text || "No idea generated. Try rephrasing.";
         outputDiv.innerText = "💡 " + resultText;
       }
     } catch (err) {
-      outputDiv.innerText = "🌐 Network error: " + err.message;
+      console.error("Fetch error:", err);
+      outputDiv.innerText = "🌐 Network error: " + err.message + ". Check console for details.";
     }
   }
 
@@ -670,7 +668,6 @@
     historyDiv.innerHTML = "";
   }
 
-  // Language change: if listening, restart with new language (seamless)
   languageSelect.addEventListener('change', () => {
     if (isListening) {
       stopListening();
@@ -680,7 +677,6 @@
     }
   });
 
-  // Attach event listeners
   document.getElementById("startBtn").onclick = startListening;
   document.getElementById("stopBtn").onclick = stopListening;
   document.getElementById("analyzeBtn").onclick = analyzeText;
@@ -688,7 +684,6 @@
   document.getElementById("copyBtn").onclick = copyText;
   document.getElementById("deleteBtn").onclick = deleteHistory;
 
-  // initial placeholder
   inputBox.value = "";
   outputDiv.innerText = "✨ Press Start, speak in Bangla/English, then click Analyze for startup ideas!";
 </script>
