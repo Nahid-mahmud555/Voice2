@@ -3,17 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>3D Insight Listener Pro | Voice + AI Startup Ideas</title>
-<!-- Google Fonts + Font Awesome -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+<title>3D Insight Listener Pro | Gemini AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
+  * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     min-height: 100vh;
     background: radial-gradient(ellipse at 30% 40%, #0a0e1a, #020408);
@@ -25,8 +19,6 @@
     position: relative;
     overflow-x: hidden;
   }
-
-  /* 3D Animated Canvas Background */
   #cosmic-canvas {
     position: fixed;
     top: 0;
@@ -37,8 +29,6 @@
     pointer-events: none;
     opacity: 0.65;
   }
-
-  /* Main 3D Glass Card */
   .insight-card {
     position: relative;
     z-index: 10;
@@ -48,31 +38,16 @@
     backdrop-filter: blur(16px);
     border-radius: 2.8rem;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.1) inset;
-    transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), box-shadow 0.3s;
+    box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5);
+    transition: transform 0.4s ease;
     animation: cardFloat 5s infinite ease-in-out;
   }
-
-  .insight-card:hover {
-    transform: translateY(-6px) scale(1.003);
-    box-shadow: 0 35px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
-  }
-
   @keyframes cardFloat {
-    0% { transform: translateY(0px) rotateX(0deg); }
-    50% { transform: translateY(-7px) rotateX(0.5deg); }
-    100% { transform: translateY(0px) rotateX(0deg); }
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-7px); }
+    100% { transform: translateY(0px); }
   }
-
-  .card-content {
-    padding: 2rem 2rem 2.2rem;
-  }
-
-  /* Header */
-  .hero-section {
-    text-align: center;
-    margin-bottom: 1.8rem;
-  }
+  .card-content { padding: 2rem 2rem 2.2rem; }
   h1 {
     font-size: 2.5rem;
     font-weight: 800;
@@ -80,272 +55,116 @@
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
-    letter-spacing: -0.5px;
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
+    text-align: center;
     margin-bottom: 0.5rem;
   }
-  h1 i {
-    background: none;
-    color: #ffd966;
-    text-shadow: 0 0 15px #ffaa33;
-  }
-  .tagline {
-    color: #b9cbff;
-    font-size: 0.9rem;
-    opacity: 0.9;
-  }
-
-  /* Language Selector Row */
-  .lang-row {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-  }
+  .tagline { text-align: center; color: #b9cbff; margin-bottom: 1.5rem; }
+  .lang-row { display: flex; justify-content: center; margin-bottom: 1.5rem; }
   .lang-pill {
     background: rgba(10, 20, 40, 0.7);
-    backdrop-filter: blur(8px);
     border-radius: 60px;
     padding: 6px 18px;
-    border: 1px solid rgba(255,255,210,0.3);
     display: inline-flex;
     align-items: center;
     gap: 12px;
-  }
-  .lang-pill label {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: #cddeff;
   }
   select {
     background: rgba(0, 0, 0, 0.7);
-    color: #f0f3ff;
+    color: white;
     border: 1px solid #6d80c0;
     border-radius: 2rem;
     padding: 8px 20px;
-    font-weight: 500;
-    font-size: 0.85rem;
     cursor: pointer;
-    outline: none;
-    transition: 0.2s;
-    font-family: 'Inter', monospace;
-  }
-  select:hover {
-    border-color: #bb99ff;
-    box-shadow: 0 0 14px rgba(140, 100, 255, 0.5);
-  }
-
-  /* Input Area */
-  .input-zone {
-    margin: 1.5rem 0 1rem;
-  }
-  .input-label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-    font-weight: 500;
-    color: #cddeff;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
   }
   textarea {
     width: 100%;
     background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 1.5rem;
     padding: 1rem 1.4rem;
-    font-size: 1rem;
+    color: white;
     font-family: 'Inter', monospace;
-    color: #f0f3ff;
     resize: vertical;
-    outline: none;
-    transition: 0.2s;
-    line-height: 1.5;
   }
-  textarea:focus {
-    border-color: #8f72ff;
-    box-shadow: 0 0 20px rgba(143, 114, 255, 0.3);
-  }
-
-  /* Button Groups - 6 buttons like original */
   .button-fleet {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 12px;
-    margin: 1.5rem 0 1.8rem;
+    margin: 1.5rem 0;
   }
   .glass-btn {
     background: rgba(25, 35, 55, 0.8);
-    backdrop-filter: blur(8px);
     border: none;
     padding: 11px 22px;
     border-radius: 60px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    font-family: 'Inter', sans-serif;
-    color: #f5f9ff;
+    color: white;
     display: inline-flex;
     align-items: center;
     gap: 10px;
     cursor: pointer;
-    transition: all 0.25s ease;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
-    border: 0.5px solid rgba(255,255,210,0.25);
+    transition: 0.2s;
   }
-  .glass-btn i {
-    font-size: 1rem;
-  }
-  .glass-btn:hover {
-    transform: translateY(-4px) scale(1.02);
-    background: rgba(55, 75, 120, 0.95);
-    box-shadow: 0 14px 26px rgba(0, 0, 0, 0.45);
-    border-color: rgba(200, 170, 255, 0.7);
-  }
-  .start-btn { background: linear-gradient(105deg, #1b6e48, #0e865a); box-shadow: 0 5px 12px #0a5a3b70; }
+  .glass-btn:hover { transform: translateY(-3px); background: rgba(55, 75, 120, 0.95); }
+  .start-btn { background: linear-gradient(105deg, #1b6e48, #0e865a); }
   .stop-btn { background: linear-gradient(105deg, #aa3838, #c94444); }
-  .analyze-btn { background: linear-gradient(105deg, #7733aa, #9b4dff); box-shadow: 0 5px 14px #5a2a9e50; }
+  .analyze-btn { background: linear-gradient(105deg, #7733aa, #9b4dff); }
   .clear-btn { background: linear-gradient(105deg, #c97e2a, #e09d32); }
   .copy-btn { background: linear-gradient(105deg, #1f6090, #2f7eb3); }
   .delete-btn { background: linear-gradient(105deg, #23232e, #1a1a2a); }
-
-  /* Output Panel */
   .output-panel {
-    margin-top: 1rem;
     background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(12px);
     border-radius: 1.8rem;
     padding: 1.3rem 1.6rem;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-  }
-  .output-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #b7cbff;
-    margin-bottom: 14px;
+    margin-top: 1rem;
   }
   #output {
-    font-size: 1.05rem;
+    color: white;
     line-height: 1.5;
-    color: #ffffffec;
-    font-weight: 500;
-    word-break: break-word;
     min-height: 90px;
-    background: transparent;
-    font-family: 'Inter', monospace;
-    white-space: pre-wrap;
   }
-
-  /* History Section */
-  .history-area {
-    margin-top: 1.5rem;
-  }
-  .history-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-  .history-title h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    background: linear-gradient(135deg, #cddbff, #9fb0ff);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+  .history-area { margin-top: 1.5rem; }
   #history {
     max-height: 120px;
     overflow-y: auto;
     background: rgba(0, 0, 0, 0.4);
     border-radius: 1.4rem;
-    padding: 0.6rem 0.9rem;
-    backdrop-filter: blur(4px);
-    scrollbar-width: thin;
-    border: 0.5px solid rgba(255,255,200,0.2);
+    padding: 0.6rem;
   }
   #history p {
     background: rgba(255,255,255,0.07);
     margin: 8px 0;
     padding: 8px 14px;
     border-radius: 34px;
-    font-size: 0.85rem;
     color: #f0f3ff;
     border-left: 3px solid #8f72ff;
-    transition: 0.1s;
   }
-  #history p:hover {
-    transform: translateX(5px);
-    background: rgba(130, 110, 230, 0.3);
-    border-left-color: #ffbc6e;
-  }
-
-  /* Listening Pulse */
-  .listening-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-left: 12px;
-  }
+  .listening-badge { display: inline-flex; align-items: center; gap: 6px; margin-left: 12px; }
   .pulse-led {
     width: 10px;
     height: 10px;
     background: #2eff9e;
     border-radius: 50%;
-    box-shadow: 0 0 8px #3effaa;
     animation: pulseAnim 1.2s infinite;
   }
   @keyframes pulseAnim {
     0% { opacity: 0.4; transform: scale(0.8);}
-    100% { opacity: 1; transform: scale(1.3); background: #b5ffd0;}
+    100% { opacity: 1; transform: scale(1.3);}
   }
-
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: #11151f; border-radius: 10px; }
-  ::-webkit-scrollbar-thumb { background: #6f5fae; border-radius: 10px; }
-
-  @media (max-width: 600px) {
-    .card-content { padding: 1.4rem; }
-    .glass-btn { padding: 8px 14px; font-size: 0.75rem; }
-    h1 { font-size: 1.8rem; }
-    textarea { font-size: 0.9rem; }
-    #output { font-size: 0.9rem; }
-    .glass-btn i { font-size: 0.8rem; }
-  }
-  footer {
-    text-align: center;
-    font-size: 0.65rem;
-    margin-top: 1.5rem;
-    opacity: 0.55;
-    color: #aab8e6;
-  }
+  footer { text-align: center; font-size: 0.65rem; margin-top: 1.5rem; opacity: 0.55; color: #aab8e6; }
+  @media (max-width: 600px) { .card-content { padding: 1.4rem; } .glass-btn { padding: 8px 14px; font-size: 0.75rem; } h1 { font-size: 1.8rem; } }
 </style>
 </head>
 <body>
-
 <canvas id="cosmic-canvas"></canvas>
-
 <div class="insight-card">
   <div class="card-content">
-    <div class="hero-section">
-      <h1><i class="fas fa-microphone-alt"></i> Insight Listener Pro</h1>
-      <p class="tagline"><i class="fas fa-rocket"></i> Voice → AI Startup Ideas | Bangla/English Support</p>
-    </div>
+    <h1><i class="fas fa-microphone-alt"></i> Insight Listener Pro</h1>
+    <p class="tagline">Voice → AI Startup Ideas (Powered by Gemini)</p>
 
-    <!-- Language Selector -->
     <div class="lang-row">
       <div class="lang-pill">
-        <label><i class="fas fa-globe"></i> 🌐 ভাষা / Language</label>
+        <label>🌐 ভাষা / Language</label>
         <select id="languageSelect">
           <option value="en-US">English (US)</option>
           <option value="bn-BD">বাংলা (Bangla)</option>
@@ -354,17 +173,14 @@
       </div>
     </div>
 
-    <!-- Input Textarea -->
     <div class="input-zone">
-      <div class="input-label">
-        <i class="fas fa-comment-dots"></i> 
-        <span>🎙️ Speak or type your conversation</span>
+      <div class="input-label" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+        <span><i class="fas fa-comment-dots"></i> 🎙️ Speak or type</span>
         <span id="voiceIndicator" class="listening-badge"></span>
       </div>
-      <textarea id="inputBox" rows="3" placeholder="Example: 'People struggle to find eco-friendly packaging...' or click Start and speak"></textarea>
+      <textarea id="inputBox" rows="3" placeholder="Example: 'People struggle to find eco-friendly packaging...'"></textarea>
     </div>
 
-    <!-- All 6 Buttons: Start, Stop, Analyze, Clear, Copy, Delete -->
     <div class="button-fleet">
       <button class="glass-btn start-btn" id="startBtn"><i class="fas fa-play"></i> Start</button>
       <button class="glass-btn stop-btn" id="stopBtn"><i class="fas fa-stop"></i> Stop</button>
@@ -374,318 +190,112 @@
       <button class="glass-btn delete-btn" id="deleteBtn"><i class="fas fa-trash-alt"></i> Delete</button>
     </div>
 
-    <!-- AI Output Panel -->
     <div class="output-panel">
-      <div class="output-header">
-        <i class="fas fa-lightbulb"></i> 
-        <span>💡 STARTUP IDEA / AI INSIGHT</span>
-      </div>
+      <div class="output-header"><i class="fas fa-lightbulb"></i> 💡 STARTUP IDEA / AI INSIGHT</div>
       <div id="output">✨ Press Start & speak, then click Analyze to generate ideas...</div>
     </div>
 
-    <!-- History Panel -->
     <div class="history-area">
-      <div class="history-title">
-        <h3><i class="fas fa-history"></i> 📝 Voice History</h3>
-        <i class="fas fa-database" style="font-size:12px; opacity:0.6;"></i>
-      </div>
+      <h3 style="color: #cddbff; margin-bottom: 10px;"><i class="fas fa-history"></i> 📝 Voice History</h3>
       <div id="history"></div>
     </div>
-    <footer>⚡ 3D Immersive | HuggingFace FLAN-T5 | Continuous Voice (Start/Stop) | Bangla/English</footer>
+    <footer>⚡ 3D Immersive | Google Gemini AI | Continuous Voice | Bangla/English</footer>
   </div>
 </div>
 
 <script>
-  // ---------- 3D ANIMATED BACKGROUND (Cosmic) ----------
+  // 3D Background
   const canvas = document.getElementById('cosmic-canvas');
   let ctx = canvas.getContext('2d');
-  let width, height;
-  let particles = [];
-  let timeFlow = 0;
-
-  function resizeCanvas() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-  }
-
+  let width, height, particles = [], timeFlow = 0;
+  function resizeCanvas() { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; }
   class StarParticle {
-    constructor() {
-      this.x = Math.random() * width;
-      this.y = Math.random() * height;
-      this.z = Math.random() * 200;
-      this.radius = 1.5 + Math.random() * 3.5;
-      this.vx = (Math.random() - 0.5) * 0.3;
-      this.vy = (Math.random() - 0.5) * 0.25;
-      this.hue = 200 + Math.random() * 100;
-    }
-    update() {
-      this.x += this.vx;
-      this.y += this.vy;
-      if (this.x < -30) this.x = width + 30;
-      if (this.x > width + 30) this.x = -30;
-      if (this.y < -30) this.y = height + 30;
-      if (this.y > height + 30) this.y = -30;
-      this.z += 0.25;
-      if (this.z > 240) this.z = 10;
-    }
-    draw() {
-      const perspective = 400 / (400 + this.z);
-      const x2 = (this.x - width/2) * perspective + width/2;
-      const y2 = (this.y - height/2) * perspective + height/2;
-      const r2 = this.radius * perspective;
-      ctx.beginPath();
-      ctx.arc(x2, y2, r2, 0, Math.PI * 2);
-      ctx.fillStyle = `hsla(${this.hue}, 80%, 65%, 0.7)`;
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = `hsla(${this.hue}, 85%, 70%, 0.6)`;
-      ctx.fill();
-    }
+    constructor() { this.x = Math.random() * width; this.y = Math.random() * height; this.z = Math.random() * 200; this.radius = 1.5 + Math.random() * 3.5; this.vx = (Math.random() - 0.5) * 0.3; this.vy = (Math.random() - 0.5) * 0.25; this.hue = 200 + Math.random() * 100; }
+    update() { this.x += this.vx; this.y += this.vy; if (this.x < -30) this.x = width + 30; if (this.x > width + 30) this.x = -30; if (this.y < -30) this.y = height + 30; if (this.y > height + 30) this.y = -30; this.z += 0.25; if (this.z > 240) this.z = 10; }
+    draw() { const perspective = 400 / (400 + this.z); const x2 = (this.x - width/2) * perspective + width/2; const y2 = (this.y - height/2) * perspective + height/2; const r2 = this.radius * perspective; ctx.beginPath(); ctx.arc(x2, y2, r2, 0, Math.PI * 2); ctx.fillStyle = `hsla(${this.hue}, 80%, 65%, 0.7)`; ctx.fill(); }
   }
+  function initStars(count) { particles = []; for (let i = 0; i < count; i++) particles.push(new StarParticle()); }
+  function drawCosmicBackground() { if (!ctx) return; ctx.clearRect(0, 0, width, height); const grad = ctx.createLinearGradient(0, 0, width*0.7, height); grad.addColorStop(0, '#02040c'); grad.addColorStop(1, '#0b1022'); ctx.fillStyle = grad; ctx.fillRect(0, 0, width, height); for (let p of particles) { p.update(); p.draw(); } timeFlow++; requestAnimationFrame(drawCosmicBackground); }
+  window.addEventListener('resize', () => { resizeCanvas(); initStars(150); });
+  resizeCanvas(); initStars(150); drawCosmicBackground();
 
-  function initStars(count) {
-    particles = [];
-    for (let i = 0; i < count; i++) particles.push(new StarParticle());
-  }
-
-  function drawCosmicBackground() {
-    if (!ctx) return;
-    ctx.clearRect(0, 0, width, height);
-    const grad = ctx.createLinearGradient(0, 0, width*0.7, height);
-    grad.addColorStop(0, '#02040c');
-    grad.addColorStop(1, '#0b1022');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, width, height);
-    ctx.save();
-    ctx.shadowBlur = 0;
-    for (let i = 0; i < 2; i++) {
-      ctx.beginPath();
-      const offset = timeFlow * 0.002 + i * 1.2;
-      for (let x = 0; x < width; x += 35) {
-        let y = height/2 + Math.sin(x * 0.006 + offset) * 45 + Math.cos(x * 0.01 + offset) * 25;
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-      ctx.strokeStyle = `rgba(130, 100, 255, ${0.12 + i*0.06})`;
-      ctx.lineWidth = 2.2;
-      ctx.stroke();
-    }
-    ctx.restore();
-    for (let p of particles) {
-      p.update();
-      p.draw();
-    }
-    for (let i = 0; i < 6; i++) {
-      ctx.beginPath();
-      const angle = timeFlow * 0.001 + i;
-      const orbX = width/2 + Math.sin(angle) * 130;
-      const orbY = height/2 + Math.cos(angle * 0.9) * 80;
-      const radGrad = ctx.createRadialGradient(orbX, orbY, 3, orbX, orbY, 38);
-      radGrad.addColorStop(0, 'rgba(100, 80, 255, 0.2)');
-      radGrad.addColorStop(1, 'rgba(20, 10, 60, 0)');
-      ctx.fillStyle = radGrad;
-      ctx.arc(orbX, orbY, 40, 0, Math.PI*2);
-      ctx.fill();
-    }
-    timeFlow++;
-    requestAnimationFrame(drawCosmicBackground);
-  }
-
-  window.addEventListener('resize', () => {
-    resizeCanvas();
-    initStars(150);
-  });
-  resizeCanvas();
-  initStars(150);
-  drawCosmicBackground();
-
-  // ---------- VOICE + AI LOGIC (Full Original Style with Start/Stop, Language, History) ----------
-  let recognition;
-  let finalText = "";
-  let lastText = "";
-  let isListening = false;
-
-  const inputBox = document.getElementById("inputBox");
-  const outputDiv = document.getElementById("output");
-  const historyDiv = document.getElementById("history");
-  const languageSelect = document.getElementById("languageSelect");
+  // Voice Recognition
+  let recognition, finalText = "", lastText = "", isListening = false;
+  const inputBox = document.getElementById("inputBox"), outputDiv = document.getElementById("output");
+  const historyDiv = document.getElementById("history"), languageSelect = document.getElementById("languageSelect");
   const voiceIndicator = document.getElementById("voiceIndicator");
 
-  // UI update for listening
-  function updateListeningUI(active) {
-    if (active) {
-      voiceIndicator.innerHTML = '<span class="pulse-led"></span><span style="margin-left:6px; font-size:11px;">Listening...</span>';
-    } else {
-      voiceIndicator.innerHTML = '';
-    }
-  }
+  function updateListeningUI(active) { voiceIndicator.innerHTML = active ? '<span class="pulse-led"></span><span>Listening...</span>' : ''; }
+  function saveHistory() { const text = inputBox.value.trim(); if (!text) return; const p = document.createElement("p"); p.innerText = "• " + text; historyDiv.prepend(p); while (historyDiv.children.length > 15) historyDiv.removeChild(historyDiv.lastChild); }
 
-  // Save history (similar to original: saves current voice text)
-  function saveHistory() {
-    const text = inputBox.value.trim();
-    if (text === "") return;
-    const p = document.createElement("p");
-    p.innerText = "• " + text;
-    historyDiv.prepend(p);
-    while (historyDiv.children.length > 15) historyDiv.removeChild(historyDiv.lastChild);
-  }
-
-  // Start voice recognition
   function startListening() {
     if (isListening) return;
+    finalText = ""; lastText = "";
     const lang = languageSelect.value;
     try {
       recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
       recognition.lang = lang;
       recognition.continuous = true;
       recognition.interimResults = true;
-
       recognition.start();
       isListening = true;
       updateListeningUI(true);
-
       recognition.onresult = function(event) {
         let currentText = "";
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          currentText += event.results[i][0].transcript;
-        }
-        if (currentText !== lastText) {
-          let newPart = currentText.replace(lastText, "");
-          finalText += newPart + " ";
-          lastText = currentText;
-        }
+        for (let i = event.resultIndex; i < event.results.length; i++) currentText += event.results[i][0].transcript;
+        if (currentText !== lastText) { let newPart = currentText.replace(lastText, ""); finalText += newPart + " "; lastText = currentText; }
         inputBox.value = finalText;
-        inputBox.scrollTop = inputBox.scrollHeight;
       };
-
-      recognition.onend = function() {
-        if (isListening) {
-          try {
-            recognition.start();
-          } catch(e) {
-            isListening = false;
-            updateListeningUI(false);
-          }
-        } else {
-          updateListeningUI(false);
-        }
-      };
-
-      recognition.onerror = function(e) {
-        console.warn("Speech error:", e.error);
-        if (e.error === 'not-allowed') {
-          inputBox.value = "🎤 Microphone access denied. Please allow permissions.";
-          stopListening();
-        }
-      };
-    } catch(e) {
-      inputBox.value = "⚠️ Browser not supported. Use Chrome/Edge.";
-    }
+      recognition.onend = function() { if (isListening) { try { recognition.start(); } catch(e) {} } else { updateListeningUI(false); } };
+      recognition.onerror = function(e) { if (e.error === 'not-allowed') { inputBox.value = "Microphone access denied."; stopListening(); } };
+    } catch(e) { inputBox.value = "Browser not supported."; }
   }
 
   function stopListening() {
     isListening = false;
-    if (recognition) {
-      try { recognition.stop(); } catch(e) {}
-    }
-    if (inputBox.value.trim() !== "") {
-      saveHistory();
-    }
-    lastText = "";
-    updateListeningUI(false);
+    if (recognition) try { recognition.stop(); } catch(e) {}
+    if (inputBox.value.trim()) saveHistory();
+    lastText = ""; updateListeningUI(false);
   }
 
-  // 🔥 এখানে API key সঠিক ফরম্যাটে দেওয়া হয়েছে (Bearer যোগ করে)
+  // 🔥 Gemini API (CORS friendly, free)
+  const GEMINI_API_KEY = "AIzaSyDPbB8UDbn9bSTatAFIRUEwAiMQjiuqKUU";  // 👈 এখানে আপনার Gemini API key বসান
+  
   async function analyzeText() {
     const text = inputBox.value.trim();
-    if (!text) {
-      outputDiv.innerText = "⚠️ Please speak or type something first! (Use Start button)";
-      return;
-    }
-    outputDiv.innerText = "🧠 Analyzing conversation... Generating startup idea ✨";
+    if (!text) { outputDiv.innerText = "⚠️ Please speak or type something first!"; return; }
+    outputDiv.innerText = "🧠 Analyzing... Generating startup idea ✨";
+    
     try {
-      const response = await fetch(
-        "https://api-inference.huggingface.co/models/google/flan-t5-base",
-        {
-          method: "POST",
-          headers: {
-            "Authorization": "Bearer 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",  // ✅ সঠিক ফরম্যাট
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            inputs: `Generate a startup idea from this conversation: ${text}`
-          })
-        }
-      );
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: `Generate a creative startup/business idea from this conversation: ${text}. Give a short, actionable idea.` }] }]
+        })
+      });
       
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `HTTP ${response.status}`);
-      }
-      
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
-      console.log("AI response:", data);
-      
-      if (data.error) {
-        outputDiv.innerText = "❌ API Error: " + data.error;
-      } else {
-        const resultText = data[0]?.generated_text || "No idea generated. Try rephrasing.";
-        outputDiv.innerText = "💡 " + resultText;
-      }
-    } catch (err) {
-      console.error("Fetch error:", err);
-      outputDiv.innerText = "🌐 Network error: " + err.message + ". Check console for details.";
+      const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No idea generated.";
+      outputDiv.innerText = "💡 " + aiText;
+    } catch(err) {
+      console.error(err);
+      outputDiv.innerText = "❌ Error: " + err.message + "। দয়া করে Gemini API key সেট করুন।";
     }
   }
 
-  // Utility functions
-  function clearText() {
-    finalText = "";
-    lastText = "";
-    inputBox.value = "";
-  }
+  function clearText() { finalText = ""; lastText = ""; inputBox.value = ""; }
+  function copyText() { navigator.clipboard.writeText(inputBox.value); alert("Copied!"); }
+  function deleteHistory() { historyDiv.innerHTML = ""; }
 
-  function copyText() {
-    const textToCopy = inputBox.value;
-    if (!textToCopy) {
-      const toast = document.createElement('div');
-      toast.innerText = "📭 Nothing to copy";
-      toast.style.cssText = "position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#1e1f2c; padding:6px 18px; border-radius:40px; color:white; z-index:999; backdrop-filter:blur(12px);";
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 1200);
-      return;
-    }
-    navigator.clipboard.writeText(textToCopy);
-    const successMsg = document.createElement('div');
-    successMsg.innerText = "✅ Copied to clipboard!";
-    successMsg.style.cssText = "position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#2c2f48; color:#bbddff; padding:7px 20px; border-radius:40px; z-index:999; backdrop-filter:blur(10px);";
-    document.body.appendChild(successMsg);
-    setTimeout(() => successMsg.remove(), 1300);
-  }
-
-  function deleteHistory() {
-    historyDiv.innerHTML = "";
-  }
-
-  languageSelect.addEventListener('change', () => {
-    if (isListening) {
-      stopListening();
-      setTimeout(() => {
-        startListening();
-      }, 200);
-    }
-  });
-
+  languageSelect.addEventListener('change', () => { if (isListening) { stopListening(); setTimeout(startListening, 200); } });
   document.getElementById("startBtn").onclick = startListening;
   document.getElementById("stopBtn").onclick = stopListening;
   document.getElementById("analyzeBtn").onclick = analyzeText;
   document.getElementById("clearBtn").onclick = clearText;
   document.getElementById("copyBtn").onclick = copyText;
   document.getElementById("deleteBtn").onclick = deleteHistory;
-
-  inputBox.value = "";
-  outputDiv.innerText = "✨ Press Start, speak in Bangla/English, then click Analyze for startup ideas!";
 </script>
 </body>
 </html>
