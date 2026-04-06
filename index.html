@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>3D Insight Listener | AI Startup Ideas</title>
+<title>3D Insight Listener Pro | Voice + AI Startup Ideas</title>
 <!-- Google Fonts + Font Awesome -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -38,12 +38,12 @@
     opacity: 0.65;
   }
 
-  /* Main 3D Glass Card with floating animation */
+  /* Main 3D Glass Card */
   .insight-card {
     position: relative;
     z-index: 10;
     width: 100%;
-    max-width: 850px;
+    max-width: 880px;
     background: rgba(12, 18, 32, 0.55);
     backdrop-filter: blur(16px);
     border-radius: 2.8rem;
@@ -68,10 +68,10 @@
     padding: 2rem 2rem 2.2rem;
   }
 
-  /* Header with 3D neon */
+  /* Header */
   .hero-section {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.8rem;
   }
   h1 {
     font-size: 2.5rem;
@@ -93,14 +93,52 @@
   }
   .tagline {
     color: #b9cbff;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     opacity: 0.9;
-    letter-spacing: 0.5px;
   }
 
-  /* 3D Input Area */
+  /* Language Selector Row */
+  .lang-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+  .lang-pill {
+    background: rgba(10, 20, 40, 0.7);
+    backdrop-filter: blur(8px);
+    border-radius: 60px;
+    padding: 6px 18px;
+    border: 1px solid rgba(255,255,210,0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .lang-pill label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #cddeff;
+  }
+  select {
+    background: rgba(0, 0, 0, 0.7);
+    color: #f0f3ff;
+    border: 1px solid #6d80c0;
+    border-radius: 2rem;
+    padding: 8px 20px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    cursor: pointer;
+    outline: none;
+    transition: 0.2s;
+    font-family: 'Inter', monospace;
+  }
+  select:hover {
+    border-color: #bb99ff;
+    box-shadow: 0 0 14px rgba(140, 100, 255, 0.5);
+  }
+
+  /* Input Area */
   .input-zone {
-    margin: 1.8rem 0 1.2rem;
+    margin: 1.5rem 0 1rem;
   }
   .input-label {
     display: flex;
@@ -131,57 +169,57 @@
     border-color: #8f72ff;
     box-shadow: 0 0 20px rgba(143, 114, 255, 0.3);
   }
-  textarea::placeholder {
-    color: #8a9bcf;
-  }
 
-  /* 3D Button Grid */
-  .button-galaxy {
+  /* Button Groups - 6 buttons like original */
+  .button-fleet {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 15px;
-    margin: 1.5rem 0 2rem;
+    gap: 12px;
+    margin: 1.5rem 0 1.8rem;
   }
-  .action-btn {
+  .glass-btn {
     background: rgba(25, 35, 55, 0.8);
     backdrop-filter: blur(8px);
     border: none;
-    padding: 12px 28px;
+    padding: 11px 22px;
     border-radius: 60px;
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-family: 'Inter', sans-serif;
     color: #f5f9ff;
     display: inline-flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     cursor: pointer;
     transition: all 0.25s ease;
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
     border: 0.5px solid rgba(255,255,210,0.25);
   }
-  .action-btn i {
-    font-size: 1.1rem;
+  .glass-btn i {
+    font-size: 1rem;
   }
-  .action-btn:hover {
+  .glass-btn:hover {
     transform: translateY(-4px) scale(1.02);
     background: rgba(55, 75, 120, 0.95);
     box-shadow: 0 14px 26px rgba(0, 0, 0, 0.45);
     border-color: rgba(200, 170, 255, 0.7);
   }
-  .speak-btn { background: linear-gradient(105deg, #1f6d49, #0e9f62); box-shadow: 0 5px 12px #0a5a3b70; }
+  .start-btn { background: linear-gradient(105deg, #1b6e48, #0e865a); box-shadow: 0 5px 12px #0a5a3b70; }
+  .stop-btn { background: linear-gradient(105deg, #aa3838, #c94444); }
   .analyze-btn { background: linear-gradient(105deg, #7733aa, #9b4dff); box-shadow: 0 5px 14px #5a2a9e50; }
+  .clear-btn { background: linear-gradient(105deg, #c97e2a, #e09d32); }
+  .copy-btn { background: linear-gradient(105deg, #1f6090, #2f7eb3); }
+  .delete-btn { background: linear-gradient(105deg, #23232e, #1a1a2a); }
 
-  /* Output Panel 3D depth */
+  /* Output Panel */
   .output-panel {
-    margin-top: 1.2rem;
+    margin-top: 1rem;
     background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(12px);
     border-radius: 1.8rem;
     padding: 1.3rem 1.6rem;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    transition: all 0.2s;
   }
   .output-header {
     display: flex;
@@ -199,20 +237,67 @@
     color: #ffffffec;
     font-weight: 500;
     word-break: break-word;
-    min-height: 100px;
+    min-height: 90px;
     background: transparent;
     font-family: 'Inter', monospace;
     white-space: pre-wrap;
   }
 
-  /* live listening pulse effect */
-  .pulse-badge {
+  /* History Section */
+  .history-area {
+    margin-top: 1.5rem;
+  }
+  .history-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .history-title h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #cddbff, #9fb0ff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  #history {
+    max-height: 120px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 1.4rem;
+    padding: 0.6rem 0.9rem;
+    backdrop-filter: blur(4px);
+    scrollbar-width: thin;
+    border: 0.5px solid rgba(255,255,200,0.2);
+  }
+  #history p {
+    background: rgba(255,255,255,0.07);
+    margin: 8px 0;
+    padding: 8px 14px;
+    border-radius: 34px;
+    font-size: 0.85rem;
+    color: #f0f3ff;
+    border-left: 3px solid #8f72ff;
+    transition: 0.1s;
+  }
+  #history p:hover {
+    transform: translateX(5px);
+    background: rgba(130, 110, 230, 0.3);
+    border-left-color: #ffbc6e;
+  }
+
+  /* Listening Pulse */
+  .listening-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     margin-left: 12px;
   }
-  .pulse-dot {
+  .pulse-led {
     width: 10px;
     height: 10px;
     background: #2eff9e;
@@ -225,22 +310,22 @@
     100% { opacity: 1; transform: scale(1.3); background: #b5ffd0;}
   }
 
-  /* custom scroll */
   ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-track { background: #11151f; border-radius: 10px; }
   ::-webkit-scrollbar-thumb { background: #6f5fae; border-radius: 10px; }
 
   @media (max-width: 600px) {
     .card-content { padding: 1.4rem; }
-    .action-btn { padding: 9px 18px; font-size: 0.8rem; }
+    .glass-btn { padding: 8px 14px; font-size: 0.75rem; }
     h1 { font-size: 1.8rem; }
     textarea { font-size: 0.9rem; }
     #output { font-size: 0.9rem; }
+    .glass-btn i { font-size: 0.8rem; }
   }
   footer {
     text-align: center;
     font-size: 0.65rem;
-    margin-top: 1.8rem;
+    margin-top: 1.5rem;
     opacity: 0.55;
     color: #aab8e6;
   }
@@ -253,37 +338,65 @@
 <div class="insight-card">
   <div class="card-content">
     <div class="hero-section">
-      <h1><i class="fas fa-lightbulb"></i> Insight Listener</h1>
-      <p class="tagline"><i class="fas fa-magic"></i> Turn your conversation into startup ideas</p>
+      <h1><i class="fas fa-microphone-alt"></i> Insight Listener Pro</h1>
+      <p class="tagline"><i class="fas fa-rocket"></i> Voice → AI Startup Ideas | Bangla/English Support</p>
     </div>
 
+    <!-- Language Selector -->
+    <div class="lang-row">
+      <div class="lang-pill">
+        <label><i class="fas fa-globe"></i> 🌐 ভাষা / Language</label>
+        <select id="languageSelect">
+          <option value="en-US">English (US)</option>
+          <option value="bn-BD">বাংলা (Bangla)</option>
+          <option value="hi-IN">हिंदी (Hindi)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Input Textarea -->
     <div class="input-zone">
       <div class="input-label">
         <i class="fas fa-comment-dots"></i> 
-        <span>💡 Speak or type your conversation</span>
-        <span id="voiceIndicator" class="pulse-badge"></span>
+        <span>🎙️ Speak or type your conversation</span>
+        <span id="voiceIndicator" class="listening-badge"></span>
       </div>
-      <textarea id="inputBox" rows="3" placeholder="E.g., 'People struggle to track daily water intake...' or click 🎙️ Speak"></textarea>
+      <textarea id="inputBox" rows="3" placeholder="Example: 'People struggle to find eco-friendly packaging...' or click Start and speak"></textarea>
     </div>
 
-    <div class="button-galaxy">
-      <button class="action-btn speak-btn" id="speakBtn"><i class="fas fa-microphone-alt"></i> Speak</button>
-      <button class="action-btn analyze-btn" id="analyzeBtn"><i class="fas fa-brain"></i> Analyze</button>
+    <!-- All 6 Buttons: Start, Stop, Analyze, Clear, Copy, Delete -->
+    <div class="button-fleet">
+      <button class="glass-btn start-btn" id="startBtn"><i class="fas fa-play"></i> Start</button>
+      <button class="glass-btn stop-btn" id="stopBtn"><i class="fas fa-stop"></i> Stop</button>
+      <button class="glass-btn analyze-btn" id="analyzeBtn"><i class="fas fa-brain"></i> Analyze</button>
+      <button class="glass-btn clear-btn" id="clearBtn"><i class="fas fa-eraser"></i> Clear</button>
+      <button class="glass-btn copy-btn" id="copyBtn"><i class="fas fa-copy"></i> Copy</button>
+      <button class="glass-btn delete-btn" id="deleteBtn"><i class="fas fa-trash-alt"></i> Delete</button>
     </div>
 
+    <!-- AI Output Panel -->
     <div class="output-panel">
       <div class="output-header">
-        <i class="fas fa-rocket"></i> 
-        <span>🚀 STARTUP IDEA / INSIGHT</span>
+        <i class="fas fa-lightbulb"></i> 
+        <span>💡 STARTUP IDEA / AI INSIGHT</span>
       </div>
-      <div id="output">✨ Waiting for input... Speak or type something then click Analyze.</div>
+      <div id="output">✨ Press Start & speak, then click Analyze to generate ideas...</div>
     </div>
-    <footer>⚡ 3D Immersive | HuggingFace FLAN-T5 | Real‑time Voice AI</footer>
+
+    <!-- History Panel -->
+    <div class="history-area">
+      <div class="history-title">
+        <h3><i class="fas fa-history"></i> 📝 Voice History</h3>
+        <i class="fas fa-database" style="font-size:12px; opacity:0.6;"></i>
+      </div>
+      <div id="history"></div>
+    </div>
+    <footer>⚡ 3D Immersive | HuggingFace FLAN-T5 | Continuous Voice (Start/Stop) | Bangla/English</footer>
   </div>
 </div>
 
 <script>
-  // ---------- 3D ANIMATED BACKGROUND: Cosmic Nebula + Particles ----------
+  // ---------- 3D ANIMATED BACKGROUND (Cosmic) ----------
   const canvas = document.getElementById('cosmic-canvas');
   let ctx = canvas.getContext('2d');
   let width, height;
@@ -339,14 +452,11 @@
   function drawCosmicBackground() {
     if (!ctx) return;
     ctx.clearRect(0, 0, width, height);
-    // deep gradient
     const grad = ctx.createLinearGradient(0, 0, width*0.7, height);
     grad.addColorStop(0, '#02040c');
     grad.addColorStop(1, '#0b1022');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, width, height);
-    
-    // glowing waves / nebula
     ctx.save();
     ctx.shadowBlur = 0;
     for (let i = 0; i < 2; i++) {
@@ -362,12 +472,10 @@
       ctx.stroke();
     }
     ctx.restore();
-    
     for (let p of particles) {
       p.update();
       p.draw();
     }
-    // floating energy orbs
     for (let i = 0; i < 6; i++) {
       ctx.beginPath();
       const angle = timeFlow * 0.001 + i;
@@ -392,80 +500,124 @@
   initStars(150);
   drawCosmicBackground();
 
-  // ---------- ORIGINAL LOGIC: Voice + HuggingFace AI (FULLY PRESERVED) ----------
-  // Voice recognition setup exactly as original
-  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  // ---------- VOICE + AI LOGIC (Full Original Style with Start/Stop, Language, History) ----------
+  let recognition;
+  let finalText = "";
+  let lastText = "";
+  let isListening = false;
+
   const inputBox = document.getElementById("inputBox");
   const outputDiv = document.getElementById("output");
-  const speakBtn = document.getElementById("speakBtn");
-  const analyzeBtn = document.getElementById("analyzeBtn");
+  const historyDiv = document.getElementById("history");
+  const languageSelect = document.getElementById("languageSelect");
   const voiceIndicator = document.getElementById("voiceIndicator");
 
-  // track if listening for UI
-  let isVoiceActive = false;
-
-  function updateVoiceUI(active) {
+  // UI update for listening
+  function updateListeningUI(active) {
     if (active) {
-      voiceIndicator.innerHTML = '<span class="pulse-dot"></span><span style="margin-left:6px; font-size:11px;">Listening...</span>';
+      voiceIndicator.innerHTML = '<span class="pulse-led"></span><span style="margin-left:6px; font-size:11px;">Listening...</span>';
     } else {
       voiceIndicator.innerHTML = '';
     }
   }
 
-  // 🎤 VOICE INPUT (identical original behaviour)
-  function startVoice() {
+  // Save history (similar to original: saves current voice text)
+  function saveHistory() {
+    const text = inputBox.value.trim();
+    if (text === "") return;
+    const p = document.createElement("p");
+    p.innerText = "• " + text;
+    historyDiv.prepend(p);
+    // limit history items to avoid overflow
+    while (historyDiv.children.length > 15) historyDiv.removeChild(historyDiv.lastChild);
+  }
+
+  // Start voice recognition (continuous, interim results, language support)
+  function startListening() {
+    if (isListening) return;
+    const lang = languageSelect.value;
     try {
+      recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = lang;
+      recognition.continuous = true;
+      recognition.interimResults = true;
+
       recognition.start();
-      isVoiceActive = true;
-      updateVoiceUI(true);
+      isListening = true;
+      updateListeningUI(true);
+
+      recognition.onresult = function(event) {
+        let currentText = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          currentText += event.results[i][0].transcript;
+        }
+        if (currentText !== lastText) {
+          let newPart = currentText.replace(lastText, "");
+          finalText += newPart + " ";
+          lastText = currentText;
+        }
+        inputBox.value = finalText;
+        // auto scroll effect
+        inputBox.scrollTop = inputBox.scrollHeight;
+      };
+
+      recognition.onend = function() {
+        if (isListening) {
+          // auto restart for continuous listening (like original voice assistant)
+          try {
+            recognition.start();
+          } catch(e) {
+            console.log("restart error");
+            isListening = false;
+            updateListeningUI(false);
+          }
+        } else {
+          updateListeningUI(false);
+        }
+      };
+
+      recognition.onerror = function(e) {
+        console.warn("Speech error:", e.error);
+        if (e.error === 'not-allowed') {
+          inputBox.value = "🎤 Microphone access denied. Please allow permissions.";
+          stopListening();
+        } else if (e.error === 'no-speech') {
+          // ignore, keep listening
+        }
+      };
     } catch(e) {
-      console.log("Already started or error");
+      inputBox.value = "⚠️ Browser not supported. Use Chrome/Edge.";
     }
   }
 
-  recognition.onstart = function() {
-    isVoiceActive = true;
-    updateVoiceUI(true);
-  };
+  function stopListening() {
+    isListening = false;
+    if (recognition) {
+      try { recognition.stop(); } catch(e) {}
+    }
+    // Save current text to history when stopped
+    if (inputBox.value.trim() !== "") {
+      saveHistory();
+    }
+    lastText = "";
+    updateListeningUI(false);
+  }
 
-  recognition.onresult = function(event) {
-    // exactly as original: sets inputBox value to transcript
-    const transcript = event.results[0][0].transcript;
-    inputBox.value = transcript;
-    // optional subtle effect
-  };
-
-  recognition.onend = function() {
-    isVoiceActive = false;
-    updateVoiceUI(false);
-  };
-
-  recognition.onerror = function(e) {
-    console.warn("Speech error:", e.error);
-    updateVoiceUI(false);
-    isVoiceActive = false;
-  };
-
-  // 🧠 AI ANALYSIS: HuggingFace FLAN-T5 (exact original endpoint & logic)
-  // IMPORTANT: User must replace "YOUR_API_KEY_HERE" with actual HuggingFace token
+  // AI Analysis: HuggingFace (same endpoint)
   async function analyzeText() {
     const text = inputBox.value.trim();
-    
     if (!text) {
-      outputDiv.innerText = "⚠️ Please speak or type something first!";
+      outputDiv.innerText = "⚠️ Please speak or type something first! (Use Start button)";
       return;
     }
-    
-    outputDiv.innerText = "🔮 Analyzing conversation... Generating startup idea ✨";
-    
+    outputDiv.innerText = "🧠 Analyzing conversation... Generating startup idea ✨";
     try {
-      // Original API call structure preserved exactly
       const response = await fetch(
         "https://api-inference.huggingface.co/models/google/flan-t5-base",
         {
           method: "POST",
           headers: {
-            "Authorization": "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",   // 👈 👈 👈 Replace with your HuggingFace API key
+            "Authorization": "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",  // 👈 Replace with your HuggingFace API key
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
@@ -473,51 +625,72 @@
           })
         }
       );
-      
       const data = await response.json();
-      console.log("HuggingFace response:", data);
-      
+      console.log("AI response:", data);
       if (data.error) {
         outputDiv.innerText = "❌ API Error: " + (data.error || "Invalid request");
         if (data.error.includes("Authorization")) {
-          outputDiv.innerText = "🔑 API Key missing or invalid. Please add your HuggingFace token in the code (Bearer YOUR_API_KEY_HERE)";
+          outputDiv.innerText = "🔑 API Key required. Please add HuggingFace token in code (Bearer YOUR_API_KEY_HERE)";
         }
       } else {
         const resultText = data[0]?.generated_text || "No idea generated. Try rephrasing.";
         outputDiv.innerText = "💡 " + resultText;
       }
     } catch (err) {
-      console.error(err);
-      outputDiv.innerText = "🌐 Network error: " + err.message + " . Check console & API key.";
+      outputDiv.innerText = "🌐 Network error: " + err.message;
     }
   }
-  
-  // attach events exactly as original onclick bindings
-  speakBtn.onclick = startVoice;
-  analyzeBtn.onclick = analyzeText;
-  
-  // Additional micro-interaction: clear placeholder behavior
-  inputBox.addEventListener('focus', () => {
-    if (inputBox.value === "E.g., 'People struggle to track daily water intake...' or click 🎙️ Speak") {
-      inputBox.value = "";
-    }
-  });
-  
-  // initial output message
-  outputDiv.innerText = "✨ Waiting for input... Speak or type something then click Analyze.";
-  
-  // small note: The original code had no delete history or copy - keeping pure to the requirement.
-  // But we keep exactly the same functionality: voice + analyze.
-  // Also ensure if recognition is already active no double start.
-  
-  // Edge cleanup
-  window.addEventListener('beforeunload', () => {
-    if (recognition && isVoiceActive) {
-      try { recognition.stop(); } catch(e) {}
-    }
-  });
-</script>
 
-<!-- instruction reminder: replace YOUR_API_KEY_HERE with actual HuggingFace token -->
+  // Utility functions
+  function clearText() {
+    finalText = "";
+    lastText = "";
+    inputBox.value = "";
+  }
+
+  function copyText() {
+    const textToCopy = inputBox.value;
+    if (!textToCopy) {
+      const toast = document.createElement('div');
+      toast.innerText = "📭 Nothing to copy";
+      toast.style.cssText = "position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#1e1f2c; padding:6px 18px; border-radius:40px; color:white; z-index:999; backdrop-filter:blur(12px);";
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 1200);
+      return;
+    }
+    navigator.clipboard.writeText(textToCopy);
+    const successMsg = document.createElement('div');
+    successMsg.innerText = "✅ Copied to clipboard!";
+    successMsg.style.cssText = "position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#2c2f48; color:#bbddff; padding:7px 20px; border-radius:40px; z-index:999; backdrop-filter:blur(10px);";
+    document.body.appendChild(successMsg);
+    setTimeout(() => successMsg.remove(), 1300);
+  }
+
+  function deleteHistory() {
+    historyDiv.innerHTML = "";
+  }
+
+  // Language change: if listening, restart with new language (seamless)
+  languageSelect.addEventListener('change', () => {
+    if (isListening) {
+      stopListening();
+      setTimeout(() => {
+        startListening();
+      }, 200);
+    }
+  });
+
+  // Attach event listeners
+  document.getElementById("startBtn").onclick = startListening;
+  document.getElementById("stopBtn").onclick = stopListening;
+  document.getElementById("analyzeBtn").onclick = analyzeText;
+  document.getElementById("clearBtn").onclick = clearText;
+  document.getElementById("copyBtn").onclick = copyText;
+  document.getElementById("deleteBtn").onclick = deleteHistory;
+
+  // initial placeholder
+  inputBox.value = "";
+  outputDiv.innerText = "✨ Press Start, speak in Bangla/English, then click Analyze for startup ideas!";
+</script>
 </body>
 </html>
