@@ -35,6 +35,12 @@ button {
 .copy { background: blue; color: white; }
 .delete { background: black; color: white; }
 
+select {
+  padding: 8px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
 #output {
   background: white;
   color: black;
@@ -78,11 +84,12 @@ button {
 
 <h3>📝 History</h3>
 <div id="history"></div>
-
 </div>
 
 <script>
 let recognition;
+let finalText = "";
+let lastText = "";
 let isListening = false;
 
 function startListening() {
@@ -98,22 +105,25 @@ function startListening() {
   isListening = true;
 
   recognition.onresult = function(event) {
-    let finalText = "";
-    for (let i = 0; i < event.results.length; i++) {
-      finalText += event.results[i][0].transcript + " ";
+    let currentText = "";
+
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      currentText += event.results[i][0].transcript;
     }
+
+    // 🔥 Duplicate remove logic
+    if (currentText !== lastText) {
+      let newPart = currentText.replace(lastText, "");
+      finalText += newPart + " ";
+      lastText = currentText;
+    }
+
     document.getElementById("output").innerText = finalText;
   };
 
-  // 🔥 AUTO RESTART FIX
+  // 🔥 Auto restart (pause holeo cholbe)
   recognition.onend = function() {
-    if (isListening) {
-      recognition.start(); // auto restart
-    }
-  };
-
-  recognition.onerror = function(event) {
-    console.log(event.error);
+    if (isListening) recognition.start();
   };
 }
 
@@ -121,9 +131,13 @@ function stopListening() {
   isListening = false;
   if (recognition) recognition.stop();
   saveHistory();
+
+  lastText = "";
 }
 
 function clearText() {
+  finalText = "";
+  lastText = "";
   document.getElementById("output").innerText = "";
 }
 
@@ -143,7 +157,6 @@ function saveHistory() {
   document.getElementById("history").prepend(p);
 }
 
-// 🔥 DELETE HISTORY
 function deleteHistory() {
   document.getElementById("history").innerHTML = "";
 }
